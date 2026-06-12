@@ -1,6 +1,19 @@
+body {
+    margin: 0;
+    background-color: bisque;
+}
+
+button {
+    margin: 10px 40px;
+}
+
 .gridContainer {
     display: flex;
     flex-wrap: wrap;
+}
+
+.blank {
+    background-color: white;
 }
 
 .colored {
