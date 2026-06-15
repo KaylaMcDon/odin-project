@@ -28,9 +28,6 @@ function operate(num1, num2, operation) {
     else if (operation == "/") {
         return divide(num1, num2);
     }
-    else {
-        alert("Please insert a valid equation");
-    }
 }
 
 
@@ -50,20 +47,48 @@ function updateEquationNumber(digit) {
     display.textContent = firstNum + operator + secondNum;
 }
 
-function updateEquationOperation(operation) {
-    if(operator!="" && secondNum!= ""){
-        solveEquation()
-    }
+function clearData() {
+    firstNum = "";
+    secondNum = "";
+    operator = "";
+}
 
-    operator = operation;
-    display.textContent = firstNum + operator + secondNum;
+function updateEquationOperation(operation) {
+    if (firstNum == "" && isNaN(display.textContent[0])) {
+        clearData()
+        display.textContent = "Please select a number first!"
+    } else if(firstNum == "" && !isNaN(display.textContent[0])){
+        //checks whether the display has a number that isnt stored in firstNum that should be used
+        firstNum = display.textContent;
+        operator = operation;
+        display.textContent = firstNum + operator + secondNum;
+    } else {
+        if (operator != "" && secondNum != "") {
+            solveEquation();
+            firstNum=display.textContent;
+        }
+
+        operator = operation;
+        display.textContent = firstNum + operator + secondNum;
+    }
 }
 
 function solveEquation() {
-    firstNum=operate(parseInt(firstNum), parseInt(secondNum), operator);
-    operator="";
-    secondNum="";
-    display.textContent = firstNum + operator + secondNum;
+    if (operator == "/" && secondNum == "0") {
+        clearData();
+        display.textContent = "Error! Cannot divide by 0";
+    } else if (operator == "" || secondNum=="") {
+        clearData();
+        display.textContent = "Please write a full equation";
+    } else {
+        firstNum = operate(parseInt(firstNum), parseInt(secondNum), operator).toString();
+        if(firstNum.length > 10) {firstNum=firstNum.slice(0, 10);}
+        display.textContent = firstNum;
+        clearData()
+        //this updates the display, and then clears the stored numbers.
+        //This means that if someone inputs a new equation the old result is automatically deleted,
+        //But that if they select an operator the resut from the previous answer is used due to the logic of updateEquationOperation
+    }
 }
 
 //adds an event listener to all 10 buttons
@@ -99,11 +124,8 @@ btnEquals.addEventListener("click", () => {
 })
 
 //clear button
-//equals button
 const btnClear = document.getElementById("clear");
 btnClear.addEventListener("click", () => {
-    firstNum="";
-    secondNum="";
-    operator="";
+    clearData();
     display.textContent = "0";
 })
