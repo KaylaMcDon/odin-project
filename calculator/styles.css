@@ -1,0 +1,45 @@
+body {
+    background-color: rgb(133, 163, 127);
+}
+
+.calculator {
+    background-color: rgb(51, 51, 51);
+    margin: 80px 30%;
+    height: 600px;
+    border-radius: 60px;
+    padding: 60px 40px;
+}
+
+p {
+    background-color: rgb(169, 214, 188);
+    font-size: 40px;
+    text-align: right;
+}
+
+button {
+    aspect-ratio: 1/1;
+    height: 90px;
+    margin: 10px;
+}
+
+.keypad {
+    display: flex;
+    justify-content: space-between;
+}
+
+.numbers {
+    width: 330px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.operations {
+    display: flex;
+    flex-direction: column;
+}
+
+.other {
+    display: flex;
+    flex-direction: column;
+}
