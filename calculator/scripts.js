@@ -29,6 +29,7 @@ function clearData() {
     secondNum = "";
     operator = "";
     previousAnswer = "";
+    decimalButton.disabled = false;
 }
 
 function updateEquationNumber(digit) {
@@ -65,6 +66,7 @@ function updateEquationOperation(operation) {
         operator = operation;
         updateDisplay();
     }
+    decimalButton.disabled = false;
 }
 
 function solveEquation() {
@@ -78,8 +80,10 @@ function solveEquation() {
         display.textContent = "Error! Please write a full equation";
     } else {
         //saves the previous answer in a variable for the next calculation if needed
-        previousAnswer = operate(parseInt(firstNum), parseInt(secondNum), operator).toString();
-        if (previousAnswer.length > 10) { previousAnswer = previousAnswer.slice(0, 10);} //shortens long decimals if necessary
+        previousAnswer = operate(parseFloat(firstNum), parseFloat(secondNum), operator).toString();
+        while(previousAnswer[previousAnswer.length-1]=="0"){
+            previousAnswer=previousAnswer.slice(0, previousAnswer.length-1) //removes trailing 0s
+        }
         display.textContent = previousAnswer;
 
         //Removes old inputs to allows the user to immediantly start typing another equation if preffered
@@ -87,6 +91,7 @@ function solveEquation() {
         firstNum = "";
         secondNum = "";
         operator = "";
+        decimalButton.disabled = false;
     }
 }
 
@@ -117,6 +122,11 @@ divisionButton.addEventListener("click", () => {
 })
 
 //logic for other buttons
+const decimalButton = document.getElementById("decimal");
+decimalButton.addEventListener("click", () => {
+    decimalButton.disabled = true;
+    updateEquationNumber(".")
+})
 const equalsButton = document.getElementById("equals");
 equalsButton.addEventListener("click", () => {
     solveEquation();
