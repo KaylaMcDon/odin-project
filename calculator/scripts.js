@@ -16,16 +16,16 @@ function divide(a, b) {
 
 function operate(num1, num2, operation) {
     //todo: make sure num1 and num2 exist
-    if (operation == "add") {
+    if (operation == "+") {
         return add(num1, num2);
     }
-    else if (operation == "sub") {
+    else if (operation == "-") {
         return subtract(num1, num2);
     }
-    else if (operation == "mult") {
+    else if (operation == "*") {
         return multiply(num1, num2);
     }
-    else if (operation == "div") {
+    else if (operation == "/") {
         return divide(num1, num2);
     }
     else {
@@ -51,7 +51,18 @@ function updateEquationNumber(digit) {
 }
 
 function updateEquationOperation(operation) {
+    if(operator!="" && secondNum!= ""){
+        solveEquation()
+    }
+
     operator = operation;
+    display.textContent = firstNum + operator + secondNum;
+}
+
+function solveEquation() {
+    firstNum=operate(parseInt(firstNum), parseInt(secondNum), operator);
+    operator="";
+    secondNum="";
     display.textContent = firstNum + operator + secondNum;
 }
 
@@ -63,6 +74,7 @@ for (let i = 0; i < 10; i++) {
     })
 }
 
+//logic for main 4 operations
 const btnAdd = document.getElementById("add");
 btnAdd.addEventListener("click", () => {
     updateEquationOperation("+");
@@ -78,4 +90,20 @@ btnMult.addEventListener("click", () => {
 const btnDiv = document.getElementById("div");
 btnDiv.addEventListener("click", () => {
     updateEquationOperation("/");
+})
+
+//equals button
+const btnEquals = document.getElementById("equals");
+btnEquals.addEventListener("click", () => {
+    solveEquation();
+})
+
+//clear button
+//equals button
+const btnClear = document.getElementById("clear");
+btnClear.addEventListener("click", () => {
+    firstNum="";
+    secondNum="";
+    operator="";
+    display.textContent = "0";
 })
