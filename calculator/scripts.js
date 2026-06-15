@@ -1,49 +1,26 @@
-function add(a, b) {
-    return a + b;
-}
-
-function subtract(a, b) {
-    return a - b;
-}
-
-function multiply(a, b) {
-    return a * b;
-}
-
-function divide(a, b) {
-    return a / b;
-}
-
 function operate(num1, num2, operation) {
-    //todo: make sure num1 and num2 exist
     if (operation == "+") {
-        return add(num1, num2);
+        return num1 + num2;
     }
     else if (operation == "-") {
-        return subtract(num1, num2);
+        return num1 - num2;
     }
     else if (operation == "*") {
-        return multiply(num1, num2);
+        return num1 * num2;
     }
     else if (operation == "/") {
-        return divide(num1, num2);
+        return num1 / num2;
     }
 }
-
-
 
 let firstNum = "";
 let secondNum = "";
 let operator = "";
+let previousAnswer = "";
 
 const display = document.getElementById("display");
 
-function updateEquationNumber(digit) {
-    if (operator === "") {
-        firstNum += digit;
-    } else {
-        secondNum += digit;
-    }
+function updateDisplay() {
     display.textContent = firstNum + operator + secondNum;
 }
 
@@ -51,81 +28,101 @@ function clearData() {
     firstNum = "";
     secondNum = "";
     operator = "";
+    previousAnswer = "";
+}
+
+function updateEquationNumber(digit) {
+    if (operator === "") {
+        firstNum += digit;
+    } else {
+        secondNum += digit;
+    }
+    updateDisplay();
 }
 
 function updateEquationOperation(operation) {
-    if (firstNum == "" && isNaN(display.textContent[0])) {
-        clearData()
-        display.textContent = "Please select a number first!"
-    } else if(firstNum == "" && !isNaN(display.textContent[0])){
-        //checks whether the display has a number that isnt stored in firstNum that should be used
-        firstNum = display.textContent;
-        operator = operation;
-        display.textContent = firstNum + operator + secondNum;
+    //Checks if the first number has been selected
+    //if it hasn't then checks to see whether the previous answer can be used instead,
+    //or if an error needs to be thrown
+    if (firstNum == "") {
+        if (previousAnswer == "") {
+            clearData()
+            display.textContent = "Error! Please select a number first"
+        } else if (previousAnswer != "") {
+
+            firstNum = previousAnswer;
+            operator = operation;
+            updateDisplay();
+        }
     } else {
+        //checks to see if theres already a valid equation,
+        //and solves that equation first before starting the next one
         if (operator != "" && secondNum != "") {
             solveEquation();
-            firstNum=display.textContent;
+            firstNum = previousAnswer;
         }
 
         operator = operation;
-        display.textContent = firstNum + operator + secondNum;
+        updateDisplay();
     }
 }
 
 function solveEquation() {
     if (operator == "/" && secondNum == "0") {
+        //check for divide by 0 error
         clearData();
         display.textContent = "Error! Cannot divide by 0";
-    } else if (operator == "" || secondNum=="") {
+    } else if (operator == "" || secondNum == "") {
+        //check to ensure both numbers and an operation have been selected
         clearData();
-        display.textContent = "Please write a full equation";
+        display.textContent = "Error! Please write a full equation";
     } else {
-        firstNum = operate(parseInt(firstNum), parseInt(secondNum), operator).toString();
-        if(firstNum.length > 10) {firstNum=firstNum.slice(0, 10);}
-        display.textContent = firstNum;
-        clearData()
-        //this updates the display, and then clears the stored numbers.
-        //This means that if someone inputs a new equation the old result is automatically deleted,
-        //But that if they select an operator the resut from the previous answer is used due to the logic of updateEquationOperation
+        //saves the previous answer in a variable for the next calculation if needed
+        previousAnswer = operate(parseInt(firstNum), parseInt(secondNum), operator).toString();
+        if (previousAnswer.length > 10) { previousAnswer = previousAnswer.slice(0, 10);} //shortens long decimals if necessary
+        display.textContent = previousAnswer;
+
+        //Removes old inputs to allows the user to immediantly start typing another equation if preffered
+        //clearData() is not used since it would also reset previousAnswer
+        firstNum = "";
+        secondNum = "";
+        operator = "";
     }
 }
 
 //adds an event listener to all 10 buttons
 for (let i = 0; i < 10; i++) {
-    const btn = document.getElementById(i.toString());
-    btn.addEventListener("click", () => {
+    const button = document.getElementById(i.toString());
+    button.addEventListener("click", () => {
         updateEquationNumber(i);
     })
 }
 
 //logic for main 4 operations
-const btnAdd = document.getElementById("add");
-btnAdd.addEventListener("click", () => {
+const additionButton = document.getElementById("add");
+additionButton.addEventListener("click", () => {
     updateEquationOperation("+");
 })
-const btnSub = document.getElementById("sub");
-btnSub.addEventListener("click", () => {
+const subtractionButton = document.getElementById("sub");
+subtractionButton.addEventListener("click", () => {
     updateEquationOperation("-");
 })
-const btnMult = document.getElementById("mult");
-btnMult.addEventListener("click", () => {
+const multiplicationButton = document.getElementById("mult");
+multiplicationButton.addEventListener("click", () => {
     updateEquationOperation("*");
 })
-const btnDiv = document.getElementById("div");
-btnDiv.addEventListener("click", () => {
+const divisionButton = document.getElementById("div");
+divisionButton.addEventListener("click", () => {
     updateEquationOperation("/");
 })
 
-//equals button
-const btnEquals = document.getElementById("equals");
-btnEquals.addEventListener("click", () => {
+//logic for other buttons
+const equalsButton = document.getElementById("equals");
+equalsButton.addEventListener("click", () => {
     solveEquation();
 })
-
-//clear button
-const btnClear = document.getElementById("clear");
-btnClear.addEventListener("click", () => {
+const clearButton = document.getElementById("clear");
+clearButton.addEventListener("click", () => {
     clearData();
     display.textContent = "0";
 })
