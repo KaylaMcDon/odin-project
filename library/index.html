@@ -9,6 +9,24 @@
 </head>
 
 <body>
+    <form>
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title" required>
+
+        <label for="name">Authors name:</label>
+        <input type="text" name="name" id="name" required>
+
+        <label for="pageNum">Page Number:</label>
+        <input type="number" name="pageNum" id="pageNum" required>
+
+        <label for="read">Have you read it already?</label>
+        <select name="read" id="read" required>
+            <option value="true">yes</option>
+            <option value="false">no</option>
+        </select>
+
+        <button type="submit" id="submit">Add To Library</button>
+    </form>
     <div class="cardContainer" id="cardContainer"></div>
 
     <script src="scripts.js"></script>

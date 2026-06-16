@@ -41,6 +41,20 @@ function updateDisplay(){
     }
 }
 
+const submit = document.getElementById("submit");
+submit.addEventListener("click", () => {
+    let title = document.getElementById("title").value;
+    let author = document.getElementById("name").value;
+    let pageNum = document.getElementById("pageNum").value;
+    let read = document.getElementById("read").value;
+    if(read=="true"){read=true}
+    else if (read=="false"){read=false}
+    
+    addBookToLibrary(title, author, pageNum, read)
+    updateDisplay();
+    event.preventDefault();
+})
+
 addBookToLibrary("The Hobbit", "Tolkien", 300, false);
 addBookToLibrary("Dune", "Frank Herbert", 412, true);
 updateDisplay()
