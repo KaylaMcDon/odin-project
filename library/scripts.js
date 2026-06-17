@@ -29,11 +29,29 @@ function makeCard(book) {
     const cardText = document.createTextNode(book.info());
     card.appendChild(cardText);
 
-    const cardContainer = document.getElementById("cardContainer")
+    const swapReadButton = document.createElement("button");
+    swapReadButton.textContent = "Read";
+    swapReadButton.addEventListener("click", () => {
+        book.read = !book.read;
+        cardText.textContent = book.info();
+    })
+    card.appendChild(swapReadButton);
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete Book";
+    deleteButton.addEventListener("click", () => {
+        card.remove();
+        for(let i=0; i<library.length; i++){
+            if(library[i].id==book.id){library.splice(i, 1)}
+        }
+    })
+    card.appendChild(deleteButton)
+
+    const cardContainer = document.getElementById("cardContainer");
     cardContainer.appendChild(card);
 }
 
-function updateDisplay(){
+function initializeDisplay(){
     for(let i=0; i<library.length; i++){
         if(document.getElementById(library[i].id)==null){
             makeCard(library[i]);
@@ -50,11 +68,11 @@ submit.addEventListener("click", () => {
     if(read=="true"){read=true}
     else if (read=="false"){read=false}
     
-    addBookToLibrary(title, author, pageNum, read)
-    updateDisplay();
+    addBookToLibrary(title, author, pageNum, read);
+    makeCard(library[library.length-1]);
     event.preventDefault();
 })
 
 addBookToLibrary("The Hobbit", "Tolkien", 300, false);
 addBookToLibrary("Dune", "Frank Herbert", 412, true);
-updateDisplay()
+initializeDisplay();
