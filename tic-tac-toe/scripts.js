@@ -40,9 +40,9 @@ const gameBoard = (() => {
 
     //assumes isWin has already been checked
     const isDraw = () => {
-        for(let row=0; row<3; row++){
-            for(let col=0; col<3; col++){
-                if(board[row][col]==""){
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 3; col++) {
+                if (board[row][col] == "") {
                     return false;
                 }
             }
@@ -64,8 +64,6 @@ const gameLogic = (() => {
     const updatePlayerNames = (p1Name, p2Name) => {
         playerOne.name = p1Name == "" ? "Player One" : p1Name;
         playerTwo.name = p2Name == "" ? "Player Two" : p2Name;
-        console.log(playerOne)
-        console.log(playerTwo)
     }
 
     const swapPlayer = () => {
@@ -82,7 +80,7 @@ const gameLogic = (() => {
         //check for win
         if (gameBoard.isWin(currentPlayer.symbol)) {
             screenLogic.updateStatus(getCurrentPlayerName() + " has won!")
-        } else if(gameBoard.isDraw()) {
+        } else if (gameBoard.isDraw()) {
             screenLogic.updateStatus("The game has ended in a draw!")
         } else {
             swapPlayer()
@@ -94,9 +92,9 @@ const gameLogic = (() => {
 
 const screenLogic = (() => {
     const board = document.getElementById("board")
-    
+
     const makeBoard = (() => {
-    
+
         for (let row = 0; row < 3; row++) {
             const rowDiv = document.createElement("div");
             rowDiv.setAttribute("class", "row")
@@ -128,12 +126,16 @@ const screenLogic = (() => {
             const p1Name = document.getElementById("playerOneName").value;
             const p2Name = document.getElementById("playerTwoName").value;
             gameLogic.updatePlayerNames(p1Name, p2Name)
-            updateStatus()
+            if (gameBoard.isWin(gameLogic.getCurrentPlayerSymbol())) {
+                updateStatus(gameLogic.getCurrentPlayerName() + " has won!");
+            } else {
+                updateStatus();
+            }
         })
 
         const resetButton = document.getElementById("resetButton");
         resetButton.addEventListener("click", () => {
-            while (board.hasChildNodes()){board.removeChild(board.lastChild)}
+            while (board.hasChildNodes()) { board.removeChild(board.lastChild) }
             gameBoard.resetBoard();
             makeBoard();
             updateStatus();
