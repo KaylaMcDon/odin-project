@@ -75,15 +75,15 @@ const screenLogic = (() => {
 
         for (let row = 0; row < 3; row++) {
             const rowDiv = document.createElement("div");
+            rowDiv.setAttribute("class", "row")
 
             for (let col = 0; col < 3; col++) {
                 const cell = document.createElement("p");
 
                 cell.addEventListener("click", function () {
                     if (this.textContent == "") {
-                        console.log(row)
-                        gameLogic.playRound(row, col);
                         this.textContent = gameLogic.getCurrentPlayerSymbol()
+                        gameLogic.playRound(row, col);
                     }
                 })
 
