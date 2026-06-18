@@ -1,5 +1,5 @@
 function player(name, symbol) {
-    return {name, symbol};
+    return { name, symbol };
 }
 
 const gameBoard = (() => {
@@ -46,51 +46,76 @@ const gameLogic = (() => {
     const playerOne = player("Player One", "X");
     const playerTwo = player("Player Two", "O");
 
-    console.log(playerOne)
+    const updatePlayerNames = (p1Name, p2Name) => {
+        playerOne.name = p1Name == "" ? "Player One" : p1Name;
+        playerTwo.name = p2Name == "" ? "Player Two" : p2Name;
+        console.log(playerOne)
+        console.log(playerTwo)
+    }
 
     const swapPlayer = () => {
         currentPlayer = currentPlayer == playerOne ? playerTwo : playerOne
     }
 
     let currentPlayer = playerOne;
-
-    const getCurrentPlayerSymbol = () => {return currentPlayer.symbol};
+    const getCurrentPlayerSymbol = () => { return currentPlayer.symbol };
+    const getCurrentPlayerName = () => { return currentPlayer.name };
 
     const playRound = (row, col) => {
         gameBoard.placeSymbol(row, col, currentPlayer.symbol);
 
         //check for win
         if (gameBoard.isWin(currentPlayer.symbol)) {
-            console.log(currentPlayer.name + " has won!")
+            screenLogic.updateStatus(getCurrentPlayerName() + " has won!")
         } else {
             swapPlayer()
+            screenLogic.updateStatus()
         }
     }
-    return ({ getCurrentPlayerSymbol, playRound })
+    return ({ getCurrentPlayerSymbol, getCurrentPlayerName, playRound, updatePlayerNames })
 })();
 
 const screenLogic = (() => {
-    const makeBoard = (() => {
-        const board = document.getElementById("board")
+    const initialSetup = (() => {
+        const makeBoard = (() => {
+            const board = document.getElementById("board")
 
-        for (let row = 0; row < 3; row++) {
-            const rowDiv = document.createElement("div");
-            rowDiv.setAttribute("class", "row")
+            for (let row = 0; row < 3; row++) {
+                const rowDiv = document.createElement("div");
+                rowDiv.setAttribute("class", "row")
 
-            for (let col = 0; col < 3; col++) {
-                const cell = document.createElement("p");
+                for (let col = 0; col < 3; col++) {
+                    const cell = document.createElement("p");
+                    cell.setAttribute("class", "cell")
 
-                cell.addEventListener("click", function () {
-                    if (this.textContent == "") {
-                        this.textContent = gameLogic.getCurrentPlayerSymbol()
-                        gameLogic.playRound(row, col);
-                    }
-                })
+                    cell.addEventListener("click", function () {
+                        if (this.textContent == "" && !gameBoard.isWin(gameLogic.getCurrentPlayerSymbol())) {
 
-                rowDiv.appendChild(cell)
+                            this.textContent = gameLogic.getCurrentPlayerSymbol()
+                            gameLogic.playRound(row, col);
+                        }
+                    })
+
+                    rowDiv.appendChild(cell)
+                }
+
+                board.appendChild(rowDiv)
             }
+        })();
 
-            board.appendChild(rowDiv)
-        }
+        const updateNameButton = document.getElementById("ApplyNames");
+        updateNameButton.addEventListener("click", () => {
+            const p1Name = document.getElementById("playerOneName").value;
+            const p2Name = document.getElementById("playerTwoName").value;
+            gameLogic.updatePlayerNames(p1Name, p2Name)
+            updateStatus()
+        })
     })();
+
+    const updateStatus = ((phrase = `It is currently ${gameLogic.getCurrentPlayerName()}'s turn`) => {
+        const status = document.getElementById("status");
+        status.textContent = phrase;
+    })
+
+    return ({updateStatus})
 })();
