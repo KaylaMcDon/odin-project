@@ -12,11 +12,6 @@
     justify-content: center;
 }
 
-.settings {
-    display: flex;
-    flex-direction: column;
-}
-
 .names {
     display: flex;
     justify-content: center;
@@ -31,4 +26,19 @@
 .status {
     display: flex;
     justify-content: center;
+    margin:20px
+}
+
+.status >p {
+    margin: 0px
+}
+
+button {
+    margin: 0 10px;
+}
+
+.reset{
+    display: flex;
+    justify-content: center;
+    margin: 20px;
 }

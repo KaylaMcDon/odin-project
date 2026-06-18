@@ -3,7 +3,7 @@ function player(name, symbol) {
 }
 
 const gameBoard = (() => {
-    let board = [["", "", "",], ["", "", "",], ["", "", "",]]
+    let board = [["", "", "",], ["", "", "",], ["", "", "",]];
 
     const placeSymbol = (row, col, symbol) => {
         board[row][col] = symbol;
@@ -38,7 +38,11 @@ const gameBoard = (() => {
         return false;
     }
 
-    return { placeSymbol, isWin }
+    const resetBoard = (() => {
+        board = [["", "", "",], ["", "", "",], ["", "", "",]];
+    })
+
+    return { placeSymbol, isWin, resetBoard }
 })();
 
 
@@ -76,32 +80,35 @@ const gameLogic = (() => {
 })();
 
 const screenLogic = (() => {
-    const initialSetup = (() => {
-        const makeBoard = (() => {
-            const board = document.getElementById("board")
+    const board = document.getElementById("board")
+    
+    const makeBoard = (() => {
+    
+        for (let row = 0; row < 3; row++) {
+            const rowDiv = document.createElement("div");
+            rowDiv.setAttribute("class", "row")
 
-            for (let row = 0; row < 3; row++) {
-                const rowDiv = document.createElement("div");
-                rowDiv.setAttribute("class", "row")
+            for (let col = 0; col < 3; col++) {
+                const cell = document.createElement("p");
+                cell.setAttribute("class", "cell")
 
-                for (let col = 0; col < 3; col++) {
-                    const cell = document.createElement("p");
-                    cell.setAttribute("class", "cell")
+                cell.addEventListener("click", function () {
+                    if (this.textContent == "" && !gameBoard.isWin(gameLogic.getCurrentPlayerSymbol())) {
 
-                    cell.addEventListener("click", function () {
-                        if (this.textContent == "" && !gameBoard.isWin(gameLogic.getCurrentPlayerSymbol())) {
+                        this.textContent = gameLogic.getCurrentPlayerSymbol()
+                        gameLogic.playRound(row, col);
+                    }
+                })
 
-                            this.textContent = gameLogic.getCurrentPlayerSymbol()
-                            gameLogic.playRound(row, col);
-                        }
-                    })
-
-                    rowDiv.appendChild(cell)
-                }
-
-                board.appendChild(rowDiv)
+                rowDiv.appendChild(cell)
             }
-        })();
+
+            board.appendChild(rowDiv)
+        }
+    });
+
+    const initialSetup = (() => {
+        makeBoard();
 
         const updateNameButton = document.getElementById("ApplyNames");
         updateNameButton.addEventListener("click", () => {
@@ -110,6 +117,14 @@ const screenLogic = (() => {
             gameLogic.updatePlayerNames(p1Name, p2Name)
             updateStatus()
         })
+
+        const resetButton = document.getElementById("resetButton");
+        resetButton.addEventListener("click", () => {
+            while (board.hasChildNodes()){board.removeChild(board.lastChild)}
+            gameBoard.resetBoard();
+            makeBoard();
+            updateStatus();
+        })
     })();
 
     const updateStatus = ((phrase = `It is currently ${gameLogic.getCurrentPlayerName()}'s turn`) => {
@@ -117,5 +132,5 @@ const screenLogic = (() => {
         status.textContent = phrase;
     })
 
-    return ({updateStatus})
+    return ({ updateStatus })
 })();

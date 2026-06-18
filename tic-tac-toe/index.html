@@ -9,24 +9,26 @@
 </head>
 
 <body>
-    <div class="settings">
-        <div class="names">
-            <div class="playerSettings">
-                <label for="playerOneName">Name for player one(X):</label>
-                <input type="text" name="playerOneName" id="playerOneName">
-            </div>
-            <button id="ApplyNames">Apply Names</button>
-            <div class="playerSettings">
-                <label for="playerTwoName">Name for player two(O):</label>
-                <input type="text" name="playerTwoName" id="playerTwoName">
-            </div>
+    <div class="names">
+        <div class="playerSettings">
+            <label for="playerOneName">Name for player one(X):</label>
+            <input type="text" name="playerOneName" id="playerOneName">
         </div>
-        <div class="status" id="status">
-            <p>It is currently Player One's turn</p>
+        <button id="ApplyNames">Apply Names</button>
+        <div class="playerSettings">
+            <label for="playerTwoName">Name for player two(O):</label>
+            <input type="text" name="playerTwoName" id="playerTwoName">
         </div>
+    </div>
+    <div class="status" id="status">
+        <p>It is currently Player One's turn</p>
     </div>
 
     <div class="board" id="board"></div>
+
+    <div class="reset">
+        <button id="resetButton">Reset Board</button>
+    </div>
 
     <script src="scripts.js"></script>
 </body>
