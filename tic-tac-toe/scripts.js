@@ -38,13 +38,24 @@ const gameBoard = (() => {
         return false;
     }
 
+    //assumes isWin has already been checked
+    const isDraw = () => {
+        for(let row=0; row<3; row++){
+            for(let col=0; col<3; col++){
+                if(board[row][col]==""){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     const resetBoard = (() => {
         board = [["", "", "",], ["", "", "",], ["", "", "",]];
     })
 
-    return { placeSymbol, isWin, resetBoard }
+    return { placeSymbol, isWin, isDraw, resetBoard }
 })();
-
 
 const gameLogic = (() => {
     const playerOne = player("Player One", "X");
@@ -71,6 +82,8 @@ const gameLogic = (() => {
         //check for win
         if (gameBoard.isWin(currentPlayer.symbol)) {
             screenLogic.updateStatus(getCurrentPlayerName() + " has won!")
+        } else if(gameBoard.isDraw()) {
+            screenLogic.updateStatus("The game has ended in a draw!")
         } else {
             swapPlayer()
             screenLogic.updateStatus()
