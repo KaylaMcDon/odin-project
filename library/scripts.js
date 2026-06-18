@@ -1,18 +1,20 @@
 const library = [];
 
-function Book(title, author, pageNum, read){
-    this.title=title;
-    this.author=author;
-    this.pageNum=pageNum;
-    this.read=read;
-    this.id=crypto.randomUUID()
+class Book {
+    constructor(title, author, pageNum, read) {
+        this.title = title;
+        this.author = author;
+        this.pageNum = pageNum;
+        this.read = read;
+        this.id = crypto.randomUUID()
+    }
 
-    this.info = function() {
-        readStatus = "you have not read it yet";
-        if(this.read){
-            readStatus="you have read it before";
+    info() {
+        let readStatus = "you have not read it yet";
+        if (this.read) {
+            readStatus = "you have read it before";
         }
-        return(`${this.title} was written by ${this.author}, has ${this.pageNum} pages, and ${readStatus}.`)
+        return (`${this.title} was written by ${this.author}, has ${this.pageNum} pages, and ${readStatus}.`)
     }
 }
 
