@@ -17,7 +17,7 @@ export function createHome() {
     content.appendChild(image);
 
     const description = document.createElement("p");
-    description.textContent = "choose from our wide array of flavors, mix-ins and toppings to create your perfect treat!";
+    description.textContent = "Choose from our wide array of flavors, mix-ins and toppings to create your perfect treat!";
     content.appendChild(description);
 
 }
