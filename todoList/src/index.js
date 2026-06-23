@@ -86,7 +86,7 @@ const internalLogic = (() => {
         const project = projects[findProjectIndexByTitle(projectTitle)];
         return project
     }
-    
+
     //public functions
     const createTodo = ((title, description, dueDate, priority, project) => {
         const todo = new Todo(title, description, dueDate, priority);
@@ -97,6 +97,16 @@ const internalLogic = (() => {
     const deleteTodo = (title, projectTitle) => {
         const project = findProject(projectTitle);
         return project.deleteTodo(title);
+    }
+
+    const markTodoComplete = (title, projectTitle) => {
+        const project = findProject(projectTitle);
+        project.markTodoComplete(title);
+    }
+
+    const updateTodo = (oldTodoTitle, projectTitle, newTitle, description, dueDate, priority, completed) => {
+        const project = findProject(projectTitle);
+        project.updateTodo(oldTodoTitle, newTitle, description, dueDate, priority, completed);
     }
 
     const createProject = (projectTitle) => {
@@ -110,22 +120,17 @@ const internalLogic = (() => {
         }
     };
 
-    const markTodoComplete = (title, projectTitle) => {
-        const project = findProject(projectTitle);
-        project.markTodoComplete(title);
-    }
-
-    const updateTodo = (oldTodoTitle, projectTitle, newTitle, description, dueDate, priority, completed) => {
-        const project = findProject(projectTitle);
-        project.updateTodo(oldTodoTitle, newTitle, description, dueDate, priority, completed);
-    }
-
     const deleteProject = (projectTitle) => {
         const index = findProjectIndexByTitle(projectTitle);
         projects.splice(index, 1);
     };
 
-    return { createTodo, deleteTodo, markTodoComplete, updateTodo, createProject, deleteProject }
+    const updateProject = (oldTitle, newTitle) => {
+        const project = findProject(oldTitle);
+        project.setTitle(newTitle);
+    }
+
+    return { createTodo, deleteTodo, markTodoComplete, updateTodo, createProject, deleteProject, updateProject }
 })();
 
 const screenLogic = (() => {
