@@ -7,7 +7,26 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="projects"></div>
+    <dialog id="todoModal">
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title">
+
+        <label for="description">Description:</label>
+        <input type="text" name="description" id="description">
+
+        <label for="date">Due-Date:</label>
+        <input type="date" name="date" id="date">
+
+        <label for="priority">Priority Level:</label>
+        <select name="priority" id="priority">
+            <option value="high">high</option>
+            <option value="medium">medium</option>
+            <option value="low">low</option>
+        </select>
+
+        <button id="submit">Add todo!</button>
+    </dialog>
+    <div id="projects" class="projects"></div>
 
     <script src="index.js"></script>
 </body>

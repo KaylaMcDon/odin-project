@@ -5,7 +5,7 @@ const internalLogic = (() => {
             this.description = description;
             this.dueDate = dueDate;
             this.priority = priority;
-            this.projectTitle=projectTitle;
+            this.projectTitle = projectTitle;
             this.completed = false;
         }
 
@@ -63,7 +63,7 @@ const internalLogic = (() => {
             return false;
         }
 
-        markTodoComplete(title){
+        markTodoComplete(title) {
             const index = this.#findIndex(title);
             this.todos[index].completeTodo();
         }
@@ -91,9 +91,9 @@ const internalLogic = (() => {
     }
 
     //public functions
-    const createTodo = ((title, description, dueDate, priority, project) => {
-        const todo = new Todo(title, description, dueDate, priority, project);
-        const projectIndex = findProjectIndexByTitle(project);
+    const createTodo = ((title, description, dueDate, priority, projectTitle) => {
+        const todo = new Todo(title, description, dueDate, priority, projectTitle);
+        const projectIndex = findProjectIndexByTitle(projectTitle);
         projects[projectIndex].addTodo(todo);
         return todo;
     });
@@ -142,6 +142,30 @@ const screenLogic = (() => {
         const projectCard = document.createElement("div");
         projectCard.class = "project";
         projectCard.id = project.title;
+
+        //create buttons
+        const addBTN = document.createElement("button");
+        const editBTN = document.createElement("button");
+        const deleteBTN = document.createElement("button");
+
+        //add style and functionality to buttons
+        addBTN.textContent = "Add new todo";
+        addBTN.addEventListener("click", () => {
+            const submitBTN = document.getElementById("submit");
+            //sets the onclick effect of the submit button so that it will add the todo
+            //to the project that addBTN button was clicked on
+            submitBTN.onclick = () => {createTodo(project.title)};
+
+            const todoModal = document.getElementById("todoModal");
+            todoModal.showModal();
+        })
+
+        //add buttons to project card
+        projectCard.appendChild(addBTN);
+        projectCard.appendChild(editBTN);
+        projectCard.appendChild(deleteBTN);
+
+        //add project to document
         projects.appendChild(projectCard);
     };
 
@@ -160,7 +184,7 @@ const screenLogic = (() => {
         //edit elements
         title.textContent = todo.title;
         description.textContent = todo.description;
-        date.textContent = todo.date;
+        date.textContent = todo.dueDate;
         priority.textContent = todo.priority;
 
         //add elements to the todo
@@ -175,10 +199,29 @@ const screenLogic = (() => {
         //add todo to project
         const project = document.getElementById(todo.projectTitle);
         project.appendChild(todoCard);
+        
     }
 
+    const createTodo = (projectTitle) => {
+        //load values from form
+        const title = document.getElementById("title").value
+        const description = document.getElementById("description").value
+        const date = document.getElementById("date").value
+        const priority = document.getElementById("priority").value
+
+        const todo = internalLogic.createTodo(title, description, date, priority, projectTitle);
+        createTodoCard(todo);
+
+        const todoModal = document.getElementById("todoModal");
+        todoModal.close();
+    }
+
+    //testing projects and todos
     createProjectCard(internalLogic.createProject("todo list"))
-    createTodoCard(internalLogic.createTodo("mow the lawn", "mow the lawn", "6/28/26", "medium", "todo list"));
+    createTodoCard(internalLogic.createTodo("Mow Lawn", "Mow the lawn", "6/28/26", "medium", "todo list"));
+
+    createProjectCard(internalLogic.createProject("other todo list"))
+    createTodoCard(internalLogic.createTodo("Wash Dishes", "Wash the dishes", "6/27/26", "high", "other todo list"));
 
 
 })();
