@@ -1,10 +1,11 @@
 const internalLogic = (() => {
     class Todo {
-        constructor(title, description, dueDate, priority) {
+        constructor(title, description, dueDate, priority, projectTitle) {
             this.title = title;
             this.description = description;
             this.dueDate = dueDate;
             this.priority = priority;
+            this.projectTitle=projectTitle;
             this.completed = false;
         }
 
@@ -19,6 +20,14 @@ const internalLogic = (() => {
             this.dueDate = dueDate == "" ? this.dueDate : dueDate
             this.priority = priority == "" ? this.priority : priority
             this.completed = completed == "" ? this.completed : completed
+        }
+
+        getProjectTitle() {
+            return this.projectTitle;
+        }
+
+        getTitle() {
+            return this.title;
         }
     }
 
@@ -54,11 +63,6 @@ const internalLogic = (() => {
             return false;
         }
 
-        updateTodo(oldTodoTitle, newTitle, description, dueDate, priority, completed) {
-            const index = this.#findIndex(todo);
-            this.todos[index].updateTodo(newTitle, description, dueDate, priority, completed);
-        }
-
         markTodoComplete(title){
             const index = this.#findIndex(title);
             this.todos[index].completeTodo();
@@ -70,8 +74,7 @@ const internalLogic = (() => {
     }
 
     const projects = new Array();
-    const todoList = new Project("todo list");
-    projects.push(todoList);
+
     //helper functions
     const findProjectIndexByTitle = (projectTitle) => {
         for (let i = 0; i < projects.length; i++) {
@@ -89,35 +92,34 @@ const internalLogic = (() => {
 
     //public functions
     const createTodo = ((title, description, dueDate, priority, project) => {
-        const todo = new Todo(title, description, dueDate, priority);
+        const todo = new Todo(title, description, dueDate, priority, project);
         const projectIndex = findProjectIndexByTitle(project);
         projects[projectIndex].addTodo(todo);
+        return todo;
     });
 
-    const deleteTodo = (title, projectTitle) => {
-        const project = findProject(projectTitle);
-        return project.deleteTodo(title);
+    const deleteTodo = (todo) => {
+        const project = findProject(todo.getProjectTitle());
+        return project.deleteTodo(todo.getTitle());
     }
 
-    const markTodoComplete = (title, projectTitle) => {
-        const project = findProject(projectTitle);
-        project.markTodoComplete(title);
+    const markTodoComplete = (todo) => {
+        const project = findProject(todo.getProjectTitle());
+        project.markTodoComplete(todo.getTitle());
     }
 
-    const updateTodo = (oldTodoTitle, projectTitle, newTitle, description, dueDate, priority, completed) => {
-        const project = findProject(projectTitle);
-        project.updateTodo(oldTodoTitle, newTitle, description, dueDate, priority, completed);
+    const updateTodo = (todo, title, description, dueDate, priority, completed) => {
+        todo.updateTodo(title, description, dueDate, priority, completed);
     }
 
     const createProject = (projectTitle) => {
-        //check if project title already exists
-        if (findProjectIndexByTitle(projectTitle) != -1) {
-            return false;
-        } else {
+        //checks to make sure project doesn't already exist
+        if (findProjectIndexByTitle(projectTitle) == -1) {
             const project = new Project(projectTitle);
-            projects.push(projectTitle);
-            return true;
+            projects.push(project);
+            return project;
         }
+        return null;
     };
 
     const deleteProject = (projectTitle) => {
@@ -134,5 +136,49 @@ const internalLogic = (() => {
 })();
 
 const screenLogic = (() => {
+    const projects = document.getElementById("projects");
+
+    const createProjectCard = (project) => {
+        const projectCard = document.createElement("div");
+        projectCard.class = "project";
+        projectCard.id = project.title;
+        projects.appendChild(projectCard);
+    };
+
+    const createTodoCard = (todo) => {
+        const todoCard = document.createElement("div");
+
+        //create elements of card
+        const title = document.createElement("p");
+        const editBTN = document.createElement("button");
+        const markDoneBTN = document.createElement("button");
+        const deleteBTN = document.createElement("button");
+        const description = document.createElement("p");
+        const date = document.createElement("p");
+        const priority = document.createElement("p");
+
+        //edit elements
+        title.textContent = todo.title;
+        description.textContent = todo.description;
+        date.textContent = todo.date;
+        priority.textContent = todo.priority;
+
+        //add elements to the todo
+        todoCard.appendChild(title);
+        todoCard.appendChild(editBTN);
+        todoCard.appendChild(markDoneBTN);
+        todoCard.appendChild(deleteBTN);
+        todoCard.appendChild(description);
+        todoCard.appendChild(date);
+        todoCard.appendChild(priority);
+
+        //add todo to project
+        const project = document.getElementById(todo.projectTitle);
+        project.appendChild(todoCard);
+    }
+
+    createProjectCard(internalLogic.createProject("todo list"))
+    createTodoCard(internalLogic.createTodo("mow the lawn", "mow the lawn", "6/28/26", "medium", "todo list"));
+
 
 })();
