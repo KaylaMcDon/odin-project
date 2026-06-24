@@ -143,24 +143,49 @@ const screenLogic = (() => {
         projectCard.class = "project";
         projectCard.id = project.title;
 
-        //create buttons
+        //create elements
+        const title = document.createElement("p")
         const addBTN = document.createElement("button");
         const editBTN = document.createElement("button");
         const deleteBTN = document.createElement("button");
 
-        //add style and functionality to buttons
-        addBTN.textContent = "Add new todo";
+        //add style and functionality to elements
+        title.textContent = project.title;
+
+        addBTN.textContent = "Add New Todo";
         addBTN.addEventListener("click", () => {
-            const submitBTN = document.getElementById("submit");
+            const submitBTN = document.getElementById("submitTodo");
             //sets the onclick effect of the submit button so that it will add the todo
             //to the project that addBTN button was clicked on
-            submitBTN.onclick = () => {createTodo(project.title)};
+            //
+            //onClick is used because we want to replace the old project with this one
+            //instead of adding multiple events
+            submitBTN.onclick = () => { createTodo(project.title) };
 
-            const todoModal = document.getElementById("todoModal");
-            todoModal.showModal();
+            const todoMenu = document.getElementById("todoMenu");
+            todoMenu.showModal();
+        });
+
+        editBTN.textContent = "Edit Project";
+        editBTN.addEventListener("click", () => {
+            const submitBTN = document.getElementById("submitProject");
+            submitBTN.onclick = () => { updateProject(project.title) };
+
+            const projectMenu = document.getElementById("projectMenu");
+            projectMenu.showModal();
+        });
+
+        deleteBTN.textContent = "Delete Project";
+        deleteBTN.addEventListener("click", () => {
+            const confirmDeleteBTN = document.getElementById("confirmDelete");
+            confirmDeleteBTN.onclick = () => { deleteProject(project.title) };
+
+            const deleteMenu = document.getElementById("deleteMenu");
+            deleteMenu.showModal();
         })
 
-        //add buttons to project card
+        //add elements to project card
+        projectCard.appendChild(title);
         projectCard.appendChild(addBTN);
         projectCard.appendChild(editBTN);
         projectCard.appendChild(deleteBTN);
@@ -199,12 +224,12 @@ const screenLogic = (() => {
         //add todo to project
         const project = document.getElementById(todo.projectTitle);
         project.appendChild(todoCard);
-        
-    }
+
+    };
 
     const createTodo = (projectTitle) => {
         //load values from form
-        const title = document.getElementById("title").value
+        const title = document.getElementById("todoTitle").value
         const description = document.getElementById("description").value
         const date = document.getElementById("date").value
         const priority = document.getElementById("priority").value
@@ -212,16 +237,65 @@ const screenLogic = (() => {
         const todo = internalLogic.createTodo(title, description, date, priority, projectTitle);
         createTodoCard(todo);
 
-        const todoModal = document.getElementById("todoModal");
-        todoModal.close();
+        const todoMenu = document.getElementById("todoMenu");
+        todoMenu.close();
+    };
+
+    const updateProject = (projectTitle) => {
+        const newTitle = document.getElementById("projectTitle").value;
+        internalLogic.updateProject(projectTitle, newTitle);
+
+        //update projectCard
+        const projectCard = document.getElementById(projectTitle);
+        projectCard.id = newTitle;
+        const titleElement = projectCard.querySelector("p");
+        titleElement.textContent = newTitle;
+
+        //close menu
+        const projectMenu = document.getElementById("projectMenu");
+        projectMenu.close();
     }
 
-    //testing projects and todos
+    const deleteProject = (projectTitle) => {
+        internalLogic.deleteProject(projectTitle);
+
+        const projectCard = document.getElementById(projectTitle);
+        projects.removeChild(projectCard);
+
+        const deleteMenu = document.getElementById("deleteMenu");
+        deleteMenu.close();
+    }
+
+    const createProject = () => {
+        const projectTitle = document.getElementById("projectTitle").value;
+        const project = internalLogic.createProject(projectTitle);
+        createProjectCard(project);
+
+        const projectMenu = document.getElementById("projectMenu");
+        projectMenu.close();
+    }
+
+    //projects and todos added for testing purposes
     createProjectCard(internalLogic.createProject("todo list"))
     createTodoCard(internalLogic.createTodo("Mow Lawn", "Mow the lawn", "6/28/26", "medium", "todo list"));
 
     createProjectCard(internalLogic.createProject("other todo list"))
     createTodoCard(internalLogic.createTodo("Wash Dishes", "Wash the dishes", "6/27/26", "high", "other todo list"));
 
+    const initialization = (() => {
+        const cancelDeleteBTN = document.getElementById("cancelDelete");
+        cancelDeleteBTN.addEventListener("click", () => {
+            const deleteMenu = document.getElementById("deleteMenu");
+            deleteMenu.close();
+        });
 
+        const createProjectBTN = document.getElementById("createProject");
+        createProjectBTN.addEventListener("click", () => {
+            const submitProjectBTN = document.getElementById("submitProject");
+            submitProjectBTN.onclick = () => createProject();
+
+            const projectMenu = document.getElementById("projectMenu");
+            projectMenu.showModal();
+        });
+    })();
 })();
