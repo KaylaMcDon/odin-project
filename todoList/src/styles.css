@@ -1,8 +1,120 @@
+body {
+    background-color: #7da0ff;
+}
+
+button {
+    background-color: white;
+    border: 0;
+    margin: 4px;
+    border-radius: 10px;
+    padding: 4px;
+    font-size: 20px;
+    height: 40px;
+}
+
+button:hover {
+    background-color: rgb(240, 240, 240);
+}
+
+.buttons > button{
+    aspect-ratio: 1/1;
+}
+
+div {
+    border-radius: 30px;
+}
+
 .projects {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.project {
+    background-color: #fffab8;
+    margin: 20px 20px;
+    padding: 16px;
+    align-items: flex-start;
+    height: fit-content;
+    width: 400px;
+}
+
+.projectHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.todo {
+    margin: 32px 6px 8px;
+    padding: 16px;
+    background-color: #cddafd;
+}
+
+.todoHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.todoFooter {
+    display: flex;
+    justify-content: space-between;
 }
 
 .complete {
     text-decoration: line-through ;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+}
+
+dialog {
+    background-color: #fff2e9;
+    border-radius: 30px;
+    border-color: #7d4f50;
+}
+
+dialog > div > button {
+    background-color: rgb(255, 235, 192);
+    border: #5e3b3c solid 2px;
+}
+
+.projectMenuElements {
+    height: 100px;
+    width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.todoMenuElements {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 30px;
+}
+
+input {
+    margin-bottom: 20px;
+}
+
+select {
+    margin-bottom: 20px;
+    background-color: white;
+    border: 1px solid grey;
+}
+
+textarea {
+    margin-bottom: 20px;
+}
+
+.deleteMenu {
+    padding: 20px;
+}
+
+.deleteButtons {
+    display: flex;
+    justify-content: flex-end;
 }

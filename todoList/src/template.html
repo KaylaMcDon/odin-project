@@ -1,52 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <dialog id="todoMenu">
-        <label for="title">Title:</label>
-        <input type="text" name="title" id="todoTitle">
+    <dialog id="todoMenu" class="todoMenu">
+        <div class="todoMenuElements">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="todoTitle">
 
-        <label for="description">Description:</label>
-        <input type="text" name="description" id="description">
+            <label for="description">Description:</label>
+            <textarea type="text" name="description" id="description"></textarea>
 
-        <label for="date">Due-Date:</label>
-        <input type="date" name="date" id="date">
+            <label for="date">Due-Date:</label>
+            <input type="date" name="date" id="date">
 
-        <label for="priority">Priority Level:</label>
-        <select name="priority" id="priority">
-            <option value="high">high</option>
-            <option value="medium">medium</option>
-            <option value="low">low</option>
-        </select>
-        
+            <label for="priority">Priority Level:</label>
+            <select name="priority" id="priority">
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
 
-        <button id="submitTodo">Add todo!</button>
+
+            <button id="submitTodo">Add Todo!</button>
+        </div>
     </dialog>
 
-    <dialog id="projectMenu">
-        <label for="title">Title:</label>
-        <input type="text" name="title" id="projectTitle">        
+    <dialog id="projectMenu" class="projectMenu">
+        <div class="projectMenuElements">
+            <div>
+                <label for="title">Title:</label>
+                <input type="text" name="title" id="projectTitle">
+            </div>
 
-        <button id="submitProject">Update project!</button>
+            <button id="submitProject">Update project!</button>
+        </div>
     </dialog>
 
-    <dialog id="deleteMenu">
-        <p>Are you sure you want to <em>permanently</em> delete this?</p>
-        <button id="confirmDelete">Confirm</button>
-        <button id="cancelDelete">Cancel</button>
+    <dialog id="deleteMenu" class="deleteMenu">
+        <p>Are you sure you want to <em>permanently</em> delete this item?</p>
+        <div class="deleteButtons">
+            <button id="confirmDelete">Confirm</button>
+            <button id="cancelDelete">Cancel</button>
+        </div>
     </dialog>
 
-    <div id="header">
-        <button id="createProject">Create New Project</button>
+    <div class="header">
+        <button id="createProject">Create New Project!</button>
     </div>
 
     <div id="projects" class="projects"></div>
 
     <script src="index.js"></script>
 </body>
+
 </html>
