@@ -202,7 +202,8 @@ const screenLogic = (() => {
         projectCard.appendChild(header);
 
         //add project to document
-        projects.appendChild(projectCard);
+        const nextCol = getSmallestColumn()
+        nextCol.appendChild(projectCard);
     };
 
     const createTodoCard = (todo) => {
@@ -291,7 +292,78 @@ const screenLogic = (() => {
 
     };
 
-    
+    const balanceProjectColumns = () => {
+        const smallestCol = getSmallestColumn()
+        const largestCol = getLargestColumn()
+
+        const minChildCount = smallestCol.childElementCount;
+        const maxChildCount = largestCol.childElementCount;
+
+        const smallestIsBeforeLargest = smallestCol.dataset.columnnum < largestCol.dataset.columnnum
+        const hasEmptyGap = minChildCount == 0 && smallestIsBeforeLargest;
+
+        const isUneven = minChildCount < maxChildCount - 1;
+        if (isUneven || hasEmptyGap) {
+            const project = largestCol.lastChild;
+            largestCol.removeChild(project);
+            smallestCol.appendChild(project);
+        }
+    }
+
+    const getSmallestColumn = () => {
+        const col1 = document.getElementById("col1");
+        const col2 = document.getElementById("col2");
+        const col3 = document.getElementById("col3");
+        const col4 = document.getElementById("col4");
+
+        const col1ChildCount = col1.childElementCount;
+        const col2ChildCount = col2.childElementCount;
+        const col3ChildCount = col3.childElementCount;
+        const col4ChildCount = col4.childElementCount;
+
+        // finds the column with the least children
+        // from left to right if tied
+        const minChildCount = Math.min(col1ChildCount, col2ChildCount, col3ChildCount, col4ChildCount)
+        switch (minChildCount) {
+            case col1ChildCount:
+                return (col1);
+            case col2ChildCount:
+                return (col2);
+            case col3ChildCount:
+                return (col3);
+            case col4ChildCount:
+                return (col4);
+        }
+    }
+
+    const getLargestColumn = () => {
+        const col1 = document.getElementById("col1");
+        const col2 = document.getElementById("col2");
+        const col3 = document.getElementById("col3");
+        const col4 = document.getElementById("col4");
+
+        const col1ChildCount = col1.childElementCount;
+        const col2ChildCount = col2.childElementCount;
+        const col3ChildCount = col3.childElementCount;
+        const col4ChildCount = col4.childElementCount;
+
+        // finds the column with the least children
+        // from left to right if tied
+        const minChildCount = Math.max(col1ChildCount, col2ChildCount, col3ChildCount, col4ChildCount)
+        switch (minChildCount) {
+            case col4ChildCount:
+                return (col4);
+            case col3ChildCount:
+                return (col3);
+            case col2ChildCount:
+                return (col2);
+            case col1ChildCount:
+                return (col1);
+        }
+    }
+
+
+
     const createTodo = (projectTitle) => {
         //load values from form
         const title = document.getElementById("todoTitle").value
@@ -317,7 +389,7 @@ const screenLogic = (() => {
         const date = document.getElementById(todoId + "date");
         const priority = document.getElementById(todoId + "priority");
 
-        
+
         title.setAttribute("class", "complete");
         description.setAttribute("class", "complete");
         date.setAttribute("class", "complete");
@@ -408,10 +480,12 @@ const screenLogic = (() => {
         internalLogic.deleteProject(projectTitle);
 
         const projectCard = document.getElementById(projectTitle);
-        projects.removeChild(projectCard);
+        projectCard.parentNode.removeChild(projectCard);
 
         const deleteMenu = document.getElementById("deleteMenu");
         deleteMenu.close();
+
+        balanceProjectColumns();
     }
 
 

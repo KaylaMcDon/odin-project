@@ -16,7 +16,7 @@ button:hover {
     background-color: rgb(240, 240, 240);
 }
 
-.buttons > button{
+.buttons>button {
     aspect-ratio: 1/1;
 }
 
@@ -28,6 +28,14 @@ div {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.column {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .project {
@@ -63,7 +71,7 @@ div {
 }
 
 .complete {
-    text-decoration: line-through ;
+    text-decoration: line-through;
 }
 
 .header {
@@ -77,7 +85,7 @@ dialog {
     border-color: #7d4f50;
 }
 
-dialog > div > button {
+dialog>div>button {
     background-color: rgb(255, 235, 192);
     border: #5e3b3c solid 2px;
 }
