@@ -54,6 +54,10 @@ const internalLogic = (() => {
             this.todos.push(todo);
         }
 
+        getTodos() {
+            return this.todos;
+        }
+
         deleteTodo(todo) {
             let index = this.#findIndex(todo);
             if (index != -1) {
@@ -70,6 +74,48 @@ const internalLogic = (() => {
 
         setTitle(newTitle) {
             this.title = newTitle;
+        }
+
+        sortTodos(method) {
+            if (method == "title") {
+                this.todos.sort((a, b) => {
+                    if (a.title < b.title) {
+                        return 1;
+                    } else if (b.title < a.title) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                })
+            } else if (method == "dueDate") {
+                this.todos.sort((a, b) => {
+                    if (a.dueDate < b.dueDate) {
+                        return -1;
+                    } else if (b.dueDate < a.dueDate) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                })
+            } else if (method == "priority") {
+                this.todos.sort((a, b) => {
+                    if (a.priority == "high") {
+                        return -1;
+                    } else if (b.priority == "high") {
+                        return 1;
+                    } else if (a.priority == "medium") {
+                        return -1;
+                    } else if (b.priority == "medium") {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+        }
+
+        reverseTodos() {
+            this.todos.reverse();
         }
     }
 
@@ -88,7 +134,7 @@ const internalLogic = (() => {
     const findProject = (projectTitle) => {
         const project = projects[findProjectIndexByTitle(projectTitle)];
         return project
-    }
+    };
 
     //public functions
     const createTodo = ((title, description, dueDate, priority, projectTitle) => {
@@ -98,11 +144,6 @@ const internalLogic = (() => {
         return todo;
     });
 
-    const deleteTodo = (todo) => {
-        const project = findProject(todo.getProjectTitle());
-        return project.deleteTodo(todo.getTitle());
-    }
-
     const markTodoComplete = (todo) => {
         const project = findProject(todo.getProjectTitle());
         project.markTodoComplete(todo.getTitle());
@@ -111,6 +152,12 @@ const internalLogic = (() => {
     const updateTodo = (todo, title, description, dueDate, priority, completed) => {
         todo.updateTodo(title, description, dueDate, priority, completed);
     }
+
+    const deleteTodo = (todo) => {
+        const project = findProject(todo.getProjectTitle());
+        return project.deleteTodo(todo.getTitle());
+    }
+
 
     const createProject = (projectTitle) => {
         //checks to make sure project doesn't already exist
@@ -122,17 +169,32 @@ const internalLogic = (() => {
         return null;
     };
 
-    const deleteProject = (projectTitle) => {
-        const index = findProjectIndexByTitle(projectTitle);
-        projects.splice(index, 1);
-    };
+    const getProjectTodos = (projectTitle) => {
+        const project = findProject(projectTitle);
+        return project.getTodos();
+    }
+
+    const sortProjectTodos = (projectTitle, sortingMethod) => {
+        const project = findProject(projectTitle);
+        project.sortTodos(sortingMethod);
+    }
+
+    const reverseProjectTodos = (projectTitle) => {
+        const project = findProject(projectTitle);
+        project.reverseTodos();
+    }
 
     const updateProject = (oldTitle, newTitle) => {
         const project = findProject(oldTitle);
         project.setTitle(newTitle);
     }
 
-    return { createTodo, deleteTodo, markTodoComplete, updateTodo, createProject, deleteProject, updateProject }
+    const deleteProject = (projectTitle) => {
+        const index = findProjectIndexByTitle(projectTitle);
+        projects.splice(index, 1);
+    };
+
+    return { createTodo, markTodoComplete, updateTodo, deleteTodo, createProject, getProjectTodos, sortProjectTodos, reverseProjectTodos, updateProject, deleteProject }
 })();
 
 const screenLogic = (() => {
@@ -146,6 +208,7 @@ const screenLogic = (() => {
         //create elements
         const title = document.createElement("p")
         const addBTN = document.createElement("button");
+        const sortBTN = document.createElement("button");
         const editBTN = document.createElement("button");
         const deleteBTN = document.createElement("button");
 
@@ -155,7 +218,7 @@ const screenLogic = (() => {
         addBTN.textContent = "+";
         addBTN.addEventListener("click", () => {
             const submitBTN = document.getElementById("submitTodo");
-            submitBTN.textContent = "Add Todo ";
+            submitBTN.textContent = "Add Todo";
             //sets the onclick effect of the submit button so that it will add the todo
             //to the project that addBTN button was clicked on
             //
@@ -166,6 +229,41 @@ const screenLogic = (() => {
             const todoMenu = document.getElementById("todoMenu");
             todoMenu.showModal();
         });
+
+        sortBTN.textContent = "⇅";
+        sortBTN.addEventListener("click", () => {
+            //sets button onclick effects
+            const reverseBTN = document.getElementById("reverseSort");
+            const titleBTN = document.getElementById("titleSort");
+            const dueDateBTN = document.getElementById("dueDateSort");
+            const priorityBTN = document.getElementById("prioritySort");
+
+            reverseBTN.onclick = () => {
+                internalLogic.reverseProjectTodos(project.title);
+                updateProjectTodos(project.title);
+            };
+
+            titleBTN.onclick = () => {
+                internalLogic.sortProjectTodos(project.title, "title");
+                updateProjectTodos(project.title);
+            };
+
+            dueDateBTN.onclick = () => {
+                internalLogic.sortProjectTodos(project.title, "dueDate");
+                updateProjectTodos(project.title);
+            };
+
+            priorityBTN.onclick = () => {
+                internalLogic.sortProjectTodos(project.title, "priority");
+                updateProjectTodos(project.title);
+            };
+            
+
+            //loads dialog box
+            const sortMenu = document.getElementById("sortMenu");
+            sortMenu.showModal();
+        })
+
 
         editBTN.textContent = "✎";
         editBTN.addEventListener("click", () => {
@@ -193,6 +291,7 @@ const screenLogic = (() => {
         buttons.setAttribute("class", "buttons");
 
         buttons.appendChild(addBTN);
+        buttons.appendChild(sortBTN);
         buttons.appendChild(editBTN);
         buttons.appendChild(deleteBTN);
 
@@ -291,6 +390,22 @@ const screenLogic = (() => {
         project.appendChild(todoCard);
 
     };
+
+    const updateProjectTodos = (projectTitle) => {
+        const projectCard = document.getElementById(projectTitle);
+        const todos = internalLogic.getProjectTodos(projectTitle);
+
+        //clears old todo order
+        while (projectCard.childElementCount > 1) {
+            projectCard.removeChild(projectCard.lastChild);
+        }
+
+        //redisplays with new order
+        for (let i = 0; i < todos.length; i++) {
+            createTodoCard(todos[i]);
+        }
+    }
+
 
     const balanceProjectColumns = () => {
         const smallestCol = getSmallestColumn()
@@ -517,13 +632,19 @@ const screenLogic = (() => {
             const projectMenu = document.getElementById("projectMenu");
             projectMenu.close();
         });
+
+        const cancelSortBTN = document.getElementById("cancelSort");
+        cancelSortBTN.addEventListener("click", () => {
+            const sortMenu = document.getElementById("sortMenu");
+            sortMenu.close();
+        })
     })();
 
 
     //projects and todos added for testing purposes
     createProjectCard(internalLogic.createProject("todo list"))
-    createTodoCard(internalLogic.createTodo("Mow Lawn", "Mow the lawn", "6/28/26", "Medium", "todo list"));
+    createTodoCard(internalLogic.createTodo("Mow Lawn", "Mow the lawn", "2026-06-28", "Medium", "todo list"));
 
     createProjectCard(internalLogic.createProject("other todo list"))
-    createTodoCard(internalLogic.createTodo("Wash Dishes", "Wash the dishes", "6/27/26", "High", "other todo list"));
+    createTodoCard(internalLogic.createTodo("Wash Dishes", "Wash the dishes", "2026-06-27", "High", "other todo list"));
 })();

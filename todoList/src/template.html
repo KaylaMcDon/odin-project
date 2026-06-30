@@ -22,9 +22,9 @@
 
             <label for="priority">Priority Level:</label>
             <select name="priority" id="priority">
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
             </select>
 
             <button id="submitTodo">Add Todo</button>
@@ -49,6 +49,17 @@
         <div class="deleteButtons">
             <button id="confirmDelete">Confirm</button>
             <button id="cancelDelete">Cancel</button>
+        </div>
+    </dialog>
+
+    <dialog id="sortMenu" class="sortMenu">
+        <p>Sory by:</p>
+        <div class="sortButtons">
+            <button id="cancelSort">Close</button>
+            <button id="reverseSort">Reverse</button>
+            <button id="titleSort">Title</button>
+            <button id="dueDateSort">Due Date</button>
+            <button id="prioritySort">Priority</button>
         </div>
     </dialog>
 
