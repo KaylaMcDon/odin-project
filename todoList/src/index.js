@@ -155,7 +155,7 @@ const screenLogic = (() => {
         addBTN.textContent = "+";
         addBTN.addEventListener("click", () => {
             const submitBTN = document.getElementById("submitTodo");
-            submitBTN.textContent = "Add Todo!";
+            submitBTN.textContent = "Add Todo ";
             //sets the onclick effect of the submit button so that it will add the todo
             //to the project that addBTN button was clicked on
             //
@@ -170,7 +170,7 @@ const screenLogic = (() => {
         editBTN.textContent = "✎";
         editBTN.addEventListener("click", () => {
             const submitBTN = document.getElementById("submitProject");
-            submitBTN.textContent = "Update Project!";
+            submitBTN.textContent = "Update Project ";
             submitBTN.onclick = () => { updateProject(project.title) };
 
             const projectMenu = document.getElementById("projectMenu");
@@ -241,7 +241,7 @@ const screenLogic = (() => {
         editBTN.textContent = "✎";
         editBTN.addEventListener("click", () => {
             const submitTodoBTN = document.getElementById("submitTodo");
-            submitTodoBTN.textContent = "Update Todo!"
+            submitTodoBTN.textContent = "Update Todo "
             submitTodoBTN.onclick = () => { updateTodo(todo) };
 
             const todoMenu = document.getElementById("todoMenu");
@@ -291,6 +291,7 @@ const screenLogic = (() => {
 
     };
 
+    
     const createTodo = (projectTitle) => {
         //load values from form
         const title = document.getElementById("todoTitle").value
@@ -378,6 +379,7 @@ const screenLogic = (() => {
         deleteMenu.close();
     }
 
+
     const createProject = () => {
         const projectTitle = document.getElementById("projectTitle").value;
         const project = internalLogic.createProject(projectTitle);
@@ -414,20 +416,32 @@ const screenLogic = (() => {
 
 
     const initialization = (() => {
+        const createProjectBTN = document.getElementById("createProject");
+        createProjectBTN.addEventListener("click", () => {
+            const submitProjectBTN = document.getElementById("submitProject");
+            submitProjectBTN.textContent = "Create Project ";
+            submitProjectBTN.onclick = () => createProject();
+
+            const projectMenu = document.getElementById("projectMenu");
+            projectMenu.showModal();
+        });
+
         const cancelDeleteBTN = document.getElementById("cancelDelete");
         cancelDeleteBTN.addEventListener("click", () => {
             const deleteMenu = document.getElementById("deleteMenu");
             deleteMenu.close();
         });
 
-        const createProjectBTN = document.getElementById("createProject");
-        createProjectBTN.addEventListener("click", () => {
-            const submitProjectBTN = document.getElementById("submitProject");
-            submitProjectBTN.textContent = "Create Project!";
-            submitProjectBTN.onclick = () => createProject();
+        const cancelTodoBTN = document.getElementById("cancelTodo");
+        cancelTodoBTN.addEventListener("click", () => {
+            const todoMenu = document.getElementById("todoMenu");
+            todoMenu.close();
+        });
 
+        const cancelProjectBTN = document.getElementById("cancelProject");
+        cancelProjectBTN.addEventListener("click", () => {
             const projectMenu = document.getElementById("projectMenu");
-            projectMenu.showModal();
+            projectMenu.close();
         });
     })();
 
