@@ -1,5 +1,6 @@
 import "./styles.css"
 import { internalLogic } from "./internalLogic.js";
+import { format } from "date-fns";
 
 const screenLogic = (() => {
     const createProjectCard = (project) => {
@@ -129,7 +130,7 @@ const screenLogic = (() => {
         description.textContent = todo.description;
         description.id = cardId + "description";
 
-        date.textContent = "Due: " + todo.dueDate;
+        date.textContent = "Due: " + format(todo.dueDate, "MM/dd/yy");
         date.id = cardId + "date";
 
         priority.textContent = "Priority: " + todo.priority;
@@ -350,7 +351,7 @@ const screenLogic = (() => {
         description.textContent = todo.description;
         description.id = newTodoId + "description";
 
-        date.textContent = "Due: " + todo.dueDate;
+        date.textContent = "Due: " + format(todo.dueDate, "MM/dd/yy");
         date.id = newTodoId + "date";
 
         priority.textContent = "Priority: " + todo.priority;
