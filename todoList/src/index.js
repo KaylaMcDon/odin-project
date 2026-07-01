@@ -207,7 +207,7 @@ const screenLogic = (() => {
         for (let i = 0; i < todos.length; i++) {
             createTodoCard(todos[i]);
         }
-    }
+    };
 
 
     const balanceProjectColumns = () => {
@@ -226,7 +226,7 @@ const screenLogic = (() => {
             largestCol.removeChild(project);
             smallestCol.appendChild(project);
         }
-    }
+    };
 
     const getSmallestColumn = () => {
         const col1 = document.getElementById("col1");
@@ -252,7 +252,7 @@ const screenLogic = (() => {
             case col4ChildCount:
                 return (col4);
         }
-    }
+    };
 
     const getLargestColumn = () => {
         const col1 = document.getElementById("col1");
@@ -278,7 +278,7 @@ const screenLogic = (() => {
             case col1ChildCount:
                 return (col1);
         }
-    }
+    };
 
 
     const createTodo = (projectTitle) => {
@@ -393,7 +393,7 @@ const screenLogic = (() => {
         } else {
             errorText.textContent = "Error: project already exists"
         }
-    }
+    };
 
     const updateProject = (projectTitle) => {
         const newTitle = document.getElementById("projectTitle").value;
@@ -408,7 +408,7 @@ const screenLogic = (() => {
         //close menu
         const projectMenu = document.getElementById("projectMenu");
         projectMenu.close();
-    }
+    };
 
     const deleteProject = (projectTitle) => {
         internalLogic.deleteProject(projectTitle);
@@ -420,10 +420,11 @@ const screenLogic = (() => {
         deleteMenu.close();
 
         balanceProjectColumns();
-    }
+    };
 
 
     const initialization = (() => {
+        //add event listeners to buttons with static events
         const createProjectBTN = document.getElementById("createProject");
         createProjectBTN.addEventListener("click", () => {
             const submitProjectBTN = document.getElementById("submitProject");
@@ -463,13 +464,27 @@ const screenLogic = (() => {
             const sortMenu = document.getElementById("sortMenu");
             sortMenu.close();
         })
+
+        //load projects/todos from local storage
+        const projects = internalLogic.readAllProjects();
+        for (let i = 0; i < projects.length; i++) {
+            const project = projects[i];
+            createProjectCard(project);
+
+            const todos = internalLogic.getProjectTodos(project.title)
+            for (let j = 0; j < todos.length; j++) {
+                const todo = todos[j];
+                createTodoCard(todo);
+            }
+        }
+
+        //creates a default project and todo if nothing was found in local storage
+        if (projects.length == 0) {
+            createProjectCard(internalLogic.createProject("Todo List"));
+            createTodoCard(internalLogic.createTodo(
+                "Example Todo", "An example todo to show how the website works",
+                new Date(2026, 7, 1), "low", "Todo List"
+            ));
+        }
     })();
-
-
-    //projects and todos added for testing purposes
-    createProjectCard(internalLogic.createProject("todo list"))
-    createTodoCard(internalLogic.createTodo("Mow Lawn", "Mow the lawn", "2026-06-28", "Medium", "todo list"));
-
-    createProjectCard(internalLogic.createProject("other todo list"))
-    createTodoCard(internalLogic.createTodo("Wash Dishes", "Wash the dishes", "2026-06-27", "High", "other todo list"));
 })();

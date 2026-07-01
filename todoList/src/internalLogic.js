@@ -1,12 +1,12 @@
 export const internalLogic = (() => {
     class Todo {
-        constructor(title, description, dueDate, priority, projectTitle) {
+        constructor(title, description, dueDate, priority, projectTitle, completed = false) {
             this.title = title;
             this.description = description;
             this.dueDate = dueDate;
             this.priority = priority;
             this.projectTitle = projectTitle;
-            this.completed = false;
+            this.completed = completed;
         }
 
         completeTodo() {
@@ -29,7 +29,7 @@ export const internalLogic = (() => {
         getTitle() {
             return this.title;
         }
-    }
+    };
 
     class Project {
         constructor(title) {
@@ -117,11 +117,26 @@ export const internalLogic = (() => {
         reverseTodos() {
             this.todos.reverse();
         }
-    }
+    };
 
     const projects = new Array();
 
     //helper functions
+    const itializeFromLocalStorage = (() => {
+        const localProjects = JSON.parse(localStorage.getItem("projects"));
+        if (localProjects != null) {
+            for (let i = 0; i < localProjects.length; i++) {
+                const project = new Project(localProjects[i].title);
+                projects.push(project);
+                for (let j = 0; j < localProjects[i].todos.length; j++) {
+                    const todoData = localProjects[i].todos[j]
+                    const todo = new Todo(todoData.title, todoData.description, todoData.dueDate, todoData.priority, todoData.projectTitle, todoData.completed)
+                    project.addTodo(todo);
+                }
+            }
+        }
+    })();
+
     const findProjectIndexByTitle = (projectTitle) => {
         for (let i = 0; i < projects.length; i++) {
             if (projects[i].title == projectTitle) {
@@ -136,34 +151,43 @@ export const internalLogic = (() => {
         return project
     };
 
+    const updateLocalStorage = () => {
+        localStorage.setItem("projects", JSON.stringify(projects));
+    };
+
     //public functions
     const createTodo = ((title, description, dueDate, priority, projectTitle) => {
         const project = findProject(projectTitle);
         if (project.findTodo(title) == -1) {
             const todo = new Todo(title, description, dueDate, priority, projectTitle);
-
             project.addTodo(todo);
+
+            updateLocalStorage();
             return todo;
         } else {
             return null;
         }
-
-
     });
 
     const markTodoComplete = (todo) => {
         const project = findProject(todo.getProjectTitle());
         project.markTodoComplete(todo.getTitle());
-    }
+
+        updateLocalStorage();
+    };
 
     const updateTodo = (todo, title, description, dueDate, priority, completed) => {
         todo.updateTodo(title, description, dueDate, priority, completed);
-    }
+        updateLocalStorage();
+    };
 
     const deleteTodo = (todo) => {
         const project = findProject(todo.getProjectTitle());
-        return project.deleteTodo(todo.getTitle());
-    }
+        const response = project.deleteTodo(todo.getTitle());
+
+        updateLocalStorage();
+        return response;
+    };
 
 
     const createProject = (projectTitle) => {
@@ -171,6 +195,8 @@ export const internalLogic = (() => {
         if (findProjectIndexByTitle(projectTitle) == -1) {
             const project = new Project(projectTitle);
             projects.push(project);
+
+            updateLocalStorage();
             return project;
         }
         return null;
@@ -179,27 +205,39 @@ export const internalLogic = (() => {
     const getProjectTodos = (projectTitle) => {
         const project = findProject(projectTitle);
         return project.getTodos();
+    };
+
+    const readAllProjects = () => {
+        return projects;
     }
 
     const sortProjectTodos = (projectTitle, sortingMethod) => {
         const project = findProject(projectTitle);
         project.sortTodos(sortingMethod);
-    }
+        updateLocalStorage();
+    };
 
     const reverseProjectTodos = (projectTitle) => {
         const project = findProject(projectTitle);
         project.reverseTodos();
-    }
+        updateLocalStorage();
+    };
 
     const updateProject = (oldTitle, newTitle) => {
         const project = findProject(oldTitle);
         project.setTitle(newTitle);
-    }
+        updateLocalStorage();
+    };
 
     const deleteProject = (projectTitle) => {
         const index = findProjectIndexByTitle(projectTitle);
         projects.splice(index, 1);
+        updateLocalStorage();
     };
 
-    return { createTodo, markTodoComplete, updateTodo, deleteTodo, createProject, getProjectTodos, sortProjectTodos, reverseProjectTodos, updateProject, deleteProject }
+    return {
+        createTodo, markTodoComplete, updateTodo, deleteTodo,
+        createProject, getProjectTodos, readAllProjects, 
+        sortProjectTodos, reverseProjectTodos, updateProject, deleteProject
+    }
 })();
