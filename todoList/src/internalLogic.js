@@ -157,8 +157,9 @@ export const internalLogic = (() => {
 
     //public functions
     const createTodo = ((title, description, dueDate, priority, projectTitle) => {
+        const isValidParameters = title != "" && description != "" && dueDate != "";
         const project = findProject(projectTitle);
-        if (project.findTodo(title) == -1) {
+        if (project.findTodo(title) == -1 && isValidParameters) {
             const todo = new Todo(title, description, dueDate, priority, projectTitle);
             project.addTodo(todo);
 
@@ -191,8 +192,9 @@ export const internalLogic = (() => {
 
 
     const createProject = (projectTitle) => {
-        //checks to make sure project doesn't already exist
-        if (findProjectIndexByTitle(projectTitle) == -1) {
+        //checks to make sure project doesn't already exist and isn't a blank title
+        const isValidParameters = projectTitle != "";
+        if (findProjectIndexByTitle(projectTitle) == -1 && isValidParameters) {
             const project = new Project(projectTitle);
             projects.push(project);
 
@@ -237,7 +239,7 @@ export const internalLogic = (() => {
 
     return {
         createTodo, markTodoComplete, updateTodo, deleteTodo,
-        createProject, getProjectTodos, readAllProjects, 
+        createProject, getProjectTodos, readAllProjects,
         sortProjectTodos, reverseProjectTodos, updateProject, deleteProject
     }
 })();

@@ -300,7 +300,7 @@ const screenLogic = (() => {
             const todoMenu = document.getElementById("todoMenu");
             todoMenu.close();
         } else {
-            errorText.textContent = "Error: todo already exists"
+            errorText.textContent = "Error: todo already exists or has invalid parameters";
         }
     };
 
@@ -391,7 +391,7 @@ const screenLogic = (() => {
             const projectMenu = document.getElementById("projectMenu");
             projectMenu.close();
         } else {
-            errorText.textContent = "Error: project already exists"
+            errorText.textContent = "Error: project already exists or is missing a title"
         }
     };
 
