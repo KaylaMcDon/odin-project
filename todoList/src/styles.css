@@ -90,6 +90,11 @@ dialog>div>button {
     border: #5e3b3c solid 2px;
 }
 
+.error {
+    color: red;
+    text-align: center;
+}
+
 .projectMenuElements {
     height: 100px;
     width: 500px;

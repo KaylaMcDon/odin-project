@@ -37,17 +37,17 @@ const internalLogic = (() => {
             this.todos = Array();
         }
 
-        #findIndex(todoTitle) {
+        #deleteIndex(index) {
+            this.todos.slice(index, 1);
+        }
+
+        findTodo(todoTitle) {
             for (let i = 0; i < this.todos.length; i++) {
                 if (this.todos[i].title == todoTitle) {
                     return i;
                 }
             }
             return -1;
-        }
-
-        #deleteIndex(index) {
-            this.todos.slice(index, 1);
         }
 
         addTodo(todo) {
@@ -59,7 +59,7 @@ const internalLogic = (() => {
         }
 
         deleteTodo(todo) {
-            let index = this.#findIndex(todo);
+            let index = this.findTodo(todo);
             if (index != -1) {
                 this.#deleteIndex(index);
                 return true;
@@ -68,7 +68,7 @@ const internalLogic = (() => {
         }
 
         markTodoComplete(title) {
-            const index = this.#findIndex(title);
+            const index = this.findTodo(title);
             this.todos[index].completeTodo();
         }
 
@@ -138,10 +138,17 @@ const internalLogic = (() => {
 
     //public functions
     const createTodo = ((title, description, dueDate, priority, projectTitle) => {
-        const todo = new Todo(title, description, dueDate, priority, projectTitle);
-        const projectIndex = findProjectIndexByTitle(projectTitle);
-        projects[projectIndex].addTodo(todo);
-        return todo;
+        const project = findProject(projectTitle);
+        if (project.findTodo(title) == -1) {
+            const todo = new Todo(title, description, dueDate, priority, projectTitle);
+
+            project.addTodo(todo);
+            return todo;
+        } else {
+            return null;
+        }
+
+
     });
 
     const markTodoComplete = (todo) => {
@@ -198,8 +205,6 @@ const internalLogic = (() => {
 })();
 
 const screenLogic = (() => {
-    const projects = document.getElementById("projects");
-
     const createProjectCard = (project) => {
         const projectCard = document.createElement("div");
         projectCard.setAttribute("class", "project");
@@ -257,7 +262,7 @@ const screenLogic = (() => {
                 internalLogic.sortProjectTodos(project.title, "priority");
                 updateProjectTodos(project.title);
             };
-            
+
 
             //loads dialog box
             const sortMenu = document.getElementById("sortMenu");
@@ -478,7 +483,6 @@ const screenLogic = (() => {
     }
 
 
-
     const createTodo = (projectTitle) => {
         //load values from form
         const title = document.getElementById("todoTitle").value
@@ -487,10 +491,19 @@ const screenLogic = (() => {
         const priority = document.getElementById("priority").value
 
         const todo = internalLogic.createTodo(title, description, date, priority, projectTitle);
-        createTodoCard(todo);
 
-        const todoMenu = document.getElementById("todoMenu");
-        todoMenu.close();
+
+        const errorText = document.getElementById("todoErrorMessage");
+
+        if (todo != null) {
+            createTodoCard(todo);
+
+            errorText.textContent = "";
+            const todoMenu = document.getElementById("todoMenu");
+            todoMenu.close();
+        } else {
+            errorText.textContent = "Error: todo already exists"
+        }
     };
 
     const completeTodo = (todo) => {
@@ -509,7 +522,7 @@ const screenLogic = (() => {
         description.setAttribute("class", "complete");
         date.setAttribute("class", "complete");
         priority.setAttribute("class", "complete");
-    }
+    };
 
     const updateTodo = (todo) => {
         //load values from form
@@ -549,7 +562,7 @@ const screenLogic = (() => {
         //close menu
         const todoMenu = document.getElementById("todoMenu");
         todoMenu.close();
-    }
+    };
 
     const deleteTodo = (todo) => {
         //delete todo on screen
@@ -564,16 +577,24 @@ const screenLogic = (() => {
         //close menu
         const deleteMenu = document.getElementById("deleteMenu");
         deleteMenu.close();
-    }
+    };
 
 
     const createProject = () => {
         const projectTitle = document.getElementById("projectTitle").value;
         const project = internalLogic.createProject(projectTitle);
-        createProjectCard(project);
 
-        const projectMenu = document.getElementById("projectMenu");
-        projectMenu.close();
+        const errorText = document.getElementById("projectErrorMessage");
+
+        if (project != null) {
+            createProjectCard(project);
+
+            errorText.textContent = "";
+            const projectMenu = document.getElementById("projectMenu");
+            projectMenu.close();
+        } else {
+            errorText.textContent = "Error: project already exists"
+        }
     }
 
     const updateProject = (projectTitle) => {
@@ -623,12 +644,18 @@ const screenLogic = (() => {
 
         const cancelTodoBTN = document.getElementById("cancelTodo");
         cancelTodoBTN.addEventListener("click", () => {
+            const errorText = document.getElementById("todoErrorMessage");
+            errorText.textContent = "";
+
             const todoMenu = document.getElementById("todoMenu");
             todoMenu.close();
         });
 
         const cancelProjectBTN = document.getElementById("cancelProject");
         cancelProjectBTN.addEventListener("click", () => {
+            const errorText = document.getElementById("projectErrorMessage");
+            errorText.textContent = "";
+
             const projectMenu = document.getElementById("projectMenu");
             projectMenu.close();
         });
