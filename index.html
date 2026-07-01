@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="84bb4fc080631c2605f1.css">
+<script defer src="main.js"></script></head>
+
+<body>
+    <dialog id="todoMenu" class="todoMenu">
+        <div class="todoMenuElements">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="todoTitle">
+
+            <label for="description">Description:</label>
+            <textarea type="text" name="description" id="description"></textarea>
+
+            <label for="date">Due-Date:</label>
+            <input type="date" name="date" id="date">
+
+            <label for="priority">Priority Level:</label>
+            <select name="priority" id="priority">
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+
+            <button id="submitTodo">Add Todo</button>
+            <button id="cancelTodo">Cancel</button>
+        </div>
+        <p id="todoErrorMessage" class="error"></p>
+    </dialog>
+
+    <dialog id="projectMenu" class="projectMenu">
+        <div class="projectMenuElements">
+            <div>
+                <label for="title">Title:</label>
+                <input type="text" name="title" id="projectTitle">
+            </div>
+
+            <button id="submitProject">Update project</button>
+            <button id="cancelProject">Cancel</button>
+        </div>
+        <p id="projectErrorMessage" class="error"></p>
+    </dialog>
+
+    <dialog id="deleteMenu" class="deleteMenu">
+        <p>Are you sure you want to <em>permanently</em> delete this item?</p>
+        <div class="deleteButtons">
+            <button id="confirmDelete">Confirm</button>
+            <button id="cancelDelete">Cancel</button>
+        </div>
+    </dialog>
+
+    <dialog id="sortMenu" class="sortMenu">
+        <p>Sory by:</p>
+        <div class="sortButtons">
+            <button id="cancelSort">Close</button>
+            <button id="reverseSort">Reverse</button>
+            <button id="titleSort">Title</button>
+            <button id="dueDateSort">Due Date</button>
+            <button id="prioritySort">Priority</button>
+        </div>
+    </dialog>
+
+    <div class="header">
+        <button id="createProject">Create New Project</button>
+    </div>
+
+    <div id="projects" class="projects">
+        <div id="col1" class="column" data-columnNum="1"></div>
+        <div id="col2" class="column" data-columnNum="2"></div>
+        <div id="col3" class="column" data-columnNum="3"></div>
+        <div id="col4" class="column" data-columnNum="4"></div>
+    </div>
+</body>
+
+</html>
