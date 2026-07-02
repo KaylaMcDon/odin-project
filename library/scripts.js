@@ -43,8 +43,8 @@ function makeCard(book) {
     deleteButton.textContent = "Delete Book";
     deleteButton.addEventListener("click", () => {
         card.remove();
-        for(let i=0; i<library.length; i++){
-            if(library[i].id==book.id){library.splice(i, 1)}
+        for (let i = 0; i < library.length; i++) {
+            if (library[i].id == book.id) { library.splice(i, 1) }
         }
     })
     card.appendChild(deleteButton)
@@ -53,26 +53,60 @@ function makeCard(book) {
     cardContainer.appendChild(card);
 }
 
-function initializeDisplay(){
-    for(let i=0; i<library.length; i++){
-        if(document.getElementById(library[i].id)==null){
+function initializeDisplay() {
+    for (let i = 0; i < library.length; i++) {
+        if (document.getElementById(library[i].id) == null) {
             makeCard(library[i]);
         }
     }
 }
 
 const submit = document.getElementById("submit");
-submit.addEventListener("click", () => {
-    let title = document.getElementById("title").value;
-    let author = document.getElementById("name").value;
-    let pageNum = document.getElementById("pageNum").value;
-    let read = document.getElementById("read").value;
-    if(read=="true"){read=true}
-    else if (read=="false"){read=false}
-    
-    addBookToLibrary(title, author, pageNum, read);
-    makeCard(library[library.length-1]);
-    event.preventDefault();
+submit.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    //load form elements
+    const title = document.getElementById("title");
+    const author = document.getElementById("name");
+    const pageNum = document.getElementById("pageNum");
+    const read = document.getElementById("read");
+
+
+    //validate correctness
+    let isValidForm = true;
+    if (title.validity.valueMissing) {
+        title.setCustomValidity("Please input a book title");
+        title.reportValidity();
+        isValidForm = false;
+    } else {
+        title.setCustomValidity("");
+    }
+
+    if (author.validity.valueMissing) {
+        author.setCustomValidity("Please input a book's author");
+        author.reportValidity();
+        isValidForm = false;
+    } else {
+        author.setCustomValidity("");
+    }
+
+    if (pageNum.validity.valueMissing) {
+        pageNum.setCustomValidity("Please input the number of pages in the book");
+        pageNum.reportValidity();
+        isValidForm = false;
+    } else {
+        pageNum.setCustomValidity("");
+    }
+
+    if (isValidForm) {
+        const readValue = () => {
+            if (read.value == "true") { return true }
+            else if (read.value == "false") { return false }
+        }
+
+        addBookToLibrary(title.value, author.value, pageNum.value, readValue());
+        makeCard(library[library.length - 1]);
+    }
 })
 
 addBookToLibrary("The Hobbit", "Tolkien", 300, false);
