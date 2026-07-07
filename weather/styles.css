@@ -1,0 +1,51 @@
+.body {
+    display: flex;
+    justify-content: space-between;
+}
+
+.hidden {
+    display: none;
+}
+
+.cardContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rightCol {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.leftCol {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.currentCard {
+    background-color: blanchedalmond;
+    border-radius: 10px;
+    width: 400px;
+    padding: 20px;
+    margin: 50px;
+}
+
+.hourCard {
+    background-color: blanchedalmond;
+    border-radius: 10px;
+    width: 350px;
+    padding: 20px;
+    margin: 50px;
+}
+
+
+.dayCard {
+    background-color: blanchedalmond;
+    border-radius: 10px;
+    width: 750px;
+    padding: 20px;
+    margin: 50px;
+}

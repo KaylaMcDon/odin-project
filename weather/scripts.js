@@ -26,23 +26,27 @@ unitGroup=us
                 makeDayCard(days[i]);
             }
         });
-}
+};
 
 function makeCurrentWeather(currentWeather) {
+    const card = document.getElementById("currentCard");
+    card.setAttribute("class", "currentCard");
+    
     const currentConditions = document.getElementById("currentConditions");
-    const currentFeelsLike = document.getElementById("currentFeelsLike");
     const currentTemp = document.getElementById("currentTemp");
 
-    currentConditions.textContent = currentWeather.conditions;
-    currentFeelsLike.textContent = `Feels like: ${currentWeather.feelslike}`;
-    currentTemp.textContent = `Temp: ${currentWeather.temp}`;
-}
+    currentConditions.textContent = `It is currently: ${currentWeather.conditions}`;
+    currentTemp.textContent = `It is: ${currentWeather.temp}°F, but feels like: ${currentWeather.feelslike}°F`;
+
+    
+};
 
 function makeHourCard(hour) {
     const card = document.createElement("div");
+    card.setAttribute("class", "hourCard");
 
     //create elements
-    const time = document.createElement("p");
+    const time = document.createElement("h3");
     const condition = document.createElement("p");
     const temp = document.createElement("p");
     const feelsLike = document.createElement("p");
@@ -50,69 +54,107 @@ function makeHourCard(hour) {
 
     //updates elements
     condition.textContent = `${hour.conditions}`;
-    temp.textContent = `Temp: ${hour.temp}`;
-    feelsLike.textContent = `Feels like: ${hour.feelslike}`;
+    temp.textContent = `Is: ${hour.temp}°F`;
+    feelsLike.textContent = `Feels like: ${hour.feelslike}°F`;
     precipProb.textContent = `Rain chance: ${hour.precipprob}`;
 
     //convert from 24 hours time to 12 hour time
-    let datetime = hour.datetime.substring(0, 2);
-    let finalTimeString = "AM";
-    datetime = parseInt(datetime);
-    if (datetime >= 12) {
-        finalTimeString = "PM";
-        datetime -= 12;
-    }
-    //updates it to not say '0 pm'
-    if (datetime == 0) {
-        datetime = 12;
-    }
-    finalTimeString = `${datetime} ${finalTimeString}`;
-    time.textContent = finalTimeString;
+    function formateTime(datetime) {
+        let hour = datetime.substring(0, 2);
+        let finalTimeString = "AM";
+        hour = parseInt(hour);
+        if (hour >= 12) {
+            finalTimeString = "PM";
+            hour -= 12;
+        }
+        //updates it to not say '0 pm'
+        if (hour == 0) {
+            hour = 12;
+        }
+        finalTimeString = `${hour} ${finalTimeString}`;
+        return finalTimeString;
+    };
+    time.textContent = formateTime(hour.datetime);
 
     //adds elements to card
+    const body = document.createElement("div");
+    body.setAttribute("class", "body");
+
+    const leftCol = document.createElement("div");
+    leftCol.setAttribute("class", "leftCol");
+    const rightCol = document.createElement("div");
+    rightCol.setAttribute("class", "rightCol");
+
+    leftCol.appendChild(condition);
+    leftCol.appendChild(precipProb);
+
+    rightCol.appendChild(feelsLike);
+    rightCol.appendChild(temp);
+
+    body.appendChild(leftCol);
+    body.appendChild(rightCol);
+
     card.appendChild(time);
-    card.appendChild(condition);
-    card.appendChild(temp);
-    card.appendChild(feelsLike);
-    card.appendChild(precipProb);
+    card.appendChild(body);
 
     const hours = document.getElementById("hourly");
     hours.appendChild(card);
-}
+};
 
 function makeDayCard(day) {
     const card = document.createElement("div");
+    card.setAttribute("class", "dayCard");
 
     //create elements
-    const date = document.createElement("p");
+    const date = document.createElement("h3");
     const condition = document.createElement("p");
-    const feelslike = document.createElement("p");
     const temp = document.createElement("p");
-    const tempMin = document.createElement("p");
-    const tempMax = document.createElement("p");
+    const tempRange = document.createElement("p");
     const precipProb = document.createElement("p");
 
     //add text
-    date.textContent = day.datetime;
-    condition.textContent = day.conditions;
-    feelslike.textContent = day.feelslike;
-    temp.textContent = day.temp;
-    tempMin.textContent = day.tempmin;
-    tempMax.textContent = day.tempmax;
-    precipProb.textContent = day.precipprob;
+    condition.textContent = `Today is: ${day.conditions}`;
+    temp.textContent = `It is: ${day.temp}°F, but feels like: ${day.feelslike}°F`;
+    tempRange.textContent = `The temperature minimum is: ${day.tempmin}, and the max is ${day.tempmax}`;
+    precipProb.textContent = `The chance of rain is ${day.precipprob}`;
+
+    function formateDate(datetime) {
+        let dayValue = datetime.substring(8, 10);
+        let monthValue = datetime.substring(5, 7);
+        if (dayValue[0] == 0) {
+            dayValue = dayValue.substring(1, 2);
+        }
+        if (monthValue[0] == 0) {
+            monthValue = monthValue.substring(1, 2);
+        }
+        return (`${monthValue}/${dayValue}`)
+    };
+    date.textContent = formateDate(day.datetime);
 
     //add elements to card
+    const body = document.createElement("div");
+    body.setAttribute("class", "body");
+
+    const leftCol = document.createElement("div");
+    leftCol.setAttribute("class", "leftCol");
+    const rightCol = document.createElement("div");
+    rightCol.setAttribute("class", "rightCol");
+
+    leftCol.appendChild(condition);
+    leftCol.appendChild(precipProb);
+
+    rightCol.appendChild(temp);
+    rightCol.appendChild(tempRange);
+
+    body.appendChild(leftCol);
+    body.appendChild(rightCol);
+
     card.appendChild(date);
-    card.appendChild(condition);
-    card.appendChild(feelslike);
-    card.appendChild(temp);
-    card.appendChild(tempMin);
-    card.appendChild(tempMax);
-    card.appendChild(precipProb);
+    card.appendChild(body);
 
     const days = document.getElementById("daily");
     days.appendChild(card);
-}
+};
 
 
 const locationButton = document.getElementById("locationButton");
@@ -129,4 +171,14 @@ locationButton.addEventListener("click", () => {
     }
 
     getWeatherData();
+    showHeaders();
 })
+
+
+function showHeaders() {
+    const headers = document.querySelectorAll("h2");
+    for(let i=0; i<headers.length; i++){
+        const header = headers[i];
+        header.setAttribute("class", "");
+    }
+}
