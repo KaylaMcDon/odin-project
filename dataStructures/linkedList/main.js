@@ -1,5 +1,5 @@
 //run with 'node main.js'
-var LinkedList = require("./linkedList")
+const LinkedList = require("./linkedList");
 
 const list = new LinkedList();
 
