@@ -13,10 +13,10 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 
 
 
-const test = new BinarySearchTree([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]);
+const test = new BinarySearchTree([1,2,3,4,5]);
 prettyPrint(test.head);
-//test.deleteItem(1);
-//prettyPrint(test.head);
+/*test.deleteItem(1);
+prettyPrint(test.head);
 console.log(test.height(11)); //3
 console.log(test.depth(6)); //1
 console.log(test.height(2)); //1
@@ -32,4 +32,12 @@ test.insert(27);
 prettyPrint(test.head);
 console.log(test.isBalanced()); //false
 test.rebalance();
-prettyPrint(test.head);
+prettyPrint(test.head);*/
+test.levelOrderForEach((value) => {console.log(value)});
+console.log("");
+test.preOrderForEach((value) => {console.log(value)});
+console.log("");
+test.inOrderForEach((value) => {console.log(value)});
+console.log("");
+test.postOrderForEach((value) => {console.log(value)});
+console.log("");

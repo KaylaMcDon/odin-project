@@ -125,7 +125,6 @@ module.exports = class BinarySearchTree {
     }
 
     levelOrderForEach(callback) {
-        //if callback is not provided or not a function
         if (typeof callback != "function") {
             throw new Error("Proper callback not provided");
         }
@@ -147,30 +146,42 @@ module.exports = class BinarySearchTree {
     }
 
     preOrderForEach(callback, node = this.head) {
+        if (typeof callback != "function") {
+            throw new Error("Proper callback not provided");
+        }
+
         const leftNode = node.getLeft();
         const rightNode = node.getRight();
 
-        callback(node);
-        if (leftNode != null) { preOrderForEach(callback, leftNode) };
-        if (rightNode != null) { preOrderForEach(callback, rightNode) };
+        callback(node.getValue());
+        if (leftNode != null) { this.preOrderForEach(callback, leftNode) };
+        if (rightNode != null) { this.preOrderForEach(callback, rightNode) };
     }
 
     inOrderForEach(callback, node = this.head) {
+        if (typeof callback != "function") {
+            throw new Error("Proper callback not provided");
+        }
+
         const leftNode = node.getLeft();
         const rightNode = node.getRight();
 
-        if (leftNode != null) { preOrderForEach(callback, leftNode) };
-        callback(node);
-        if (rightNode != null) { preOrderForEach(callback, rightNode) };
+        if (leftNode != null) { this.inOrderForEach(callback, leftNode) };
+        callback(node.getValue());
+        if (rightNode != null) { this.inOrderForEach(callback, rightNode) };
     }
 
     postOrderForEach(callback, node = this.head) {
+        if (typeof callback != "function") {
+            throw new Error("Proper callback not provided");
+        }
+
         const leftNode = node.getLeft();
         const rightNode = node.getRight();
 
-        if (leftNode != null) { preOrderForEach(callback, leftNode) };
-        if (rightNode != null) { preOrderForEach(callback, rightNode) };
-        callback(node);
+        if (leftNode != null) { this.postOrderForEach(callback, leftNode) };
+        if (rightNode != null) { this.postOrderForEach(callback, rightNode) };
+        callback(node.getValue());
     }
 
     height(value) {
