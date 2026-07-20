@@ -25,6 +25,10 @@ export class Gameboard {
         }
     }
 
+    getArray() {
+        return this.board;
+    }
+
     getAllShips() {
         const ships = [];
         
@@ -91,5 +95,38 @@ export class Gameboard {
             }
         }
         return false;
+    }
+}
+
+export class Player{
+    constructor(name, boardID){
+        this.name = name;
+        this.board = new Gameboard();
+        this.boardID = boardID;
+    }
+
+    generateRandomBoard(){
+        //TODO: Make actually random
+        this.board.placeShip(0, 0, 2, "R");
+    }
+
+    getBoard(){
+        return this.board;
+    }
+
+    getName(){
+        return this.name;
+    }
+
+    setName(name){
+        this.name = name;
+    }
+
+    getBoardID() {
+        return this.boardID;
+    }
+
+    attackBoard(row, col){
+        this.board.recieveAttack(row, col)
     }
 }

@@ -1,4 +1,4 @@
-import {Ship, Gameboard} from "./battleship";
+import {Ship, Gameboard, Player} from "./battleship";
 
 test("Ship Functions", () => {
     const ship1 = new Ship(3);
