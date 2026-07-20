@@ -6,7 +6,7 @@ export const DOMLogic = (() => {
         }
     };
 
-    const displayGameboard = (player) => {
+    const displayEnemyGameboard = (player) => {
         const divID = player.getBoardID();
         cleargameboard(divID);
         const screenBoard = document.getElementById(divID);
@@ -25,6 +25,18 @@ export const DOMLogic = (() => {
                     const marker = document.createElement("div");
                     marker.setAttribute("class", "missMarker");
                     square.appendChild(marker);
+                } else {
+                    square.addEventListener("click", () => {
+                        const message = player.attackBoard(i, j);
+                        displayEnemyGameboard(player);
+
+                        const status = document.getElementById("status");
+                        if(player.hasLost()){
+                            status.textContent = "You win!";
+                        } else {
+                            status.textContent = message;
+                        }
+                    })
                 }
 
                 screenBoard.appendChild(square);
@@ -32,5 +44,38 @@ export const DOMLogic = (() => {
         }
     };
 
-    return {displayGameboard}
+    const displayFriendlyGameboard = (player) => {
+        const divID = player.getBoardID();
+        cleargameboard(divID);
+        const screenBoard = document.getElementById(divID);
+
+        const gameboard = player.getBoard().getArray();
+        for(let i=0; i<gameboard.length; i++){
+            for(let j=0; j<gameboard[i].length; j++){
+                const square = document.createElement("div");
+                square.setAttribute("class", "square");
+                
+                if(gameboard[i][j] == "hit"){
+                    const marker = document.createElement("div");
+                    marker.setAttribute("class", "hitMarker");
+                    square.appendChild(marker);
+
+                    square.setAttribute("class", "shipSquare");
+                } else if(gameboard[i][j] == "miss"){
+                    const marker = document.createElement("div");
+                    marker.setAttribute("class", "missMarker");
+                    square.appendChild(marker);
+                } else {
+                    const isShip = typeof gameboard[i][j] == "object";
+                    if (isShip){
+                        square.setAttribute("class", "shipSquare");
+                    }
+                }
+
+                screenBoard.appendChild(square);
+            }
+        }
+    };
+
+    return {displayEnemyGameboard, displayFriendlyGameboard}
 })();

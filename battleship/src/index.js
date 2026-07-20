@@ -8,7 +8,5 @@ const computer = new Player("Computer", "computerBoard");
 player.generateRandomBoard();
 computer.generateRandomBoard();
 
-DOMLogic.displayGameboard(computer);
-computer.attackBoard(0, 0);
-computer.attackBoard(4, 3);
-DOMLogic.displayGameboard(computer);
+DOMLogic.displayFriendlyGameboard(player);
+DOMLogic.displayEnemyGameboard(computer);

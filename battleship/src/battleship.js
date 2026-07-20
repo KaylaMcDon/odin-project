@@ -96,6 +96,10 @@ export class Gameboard {
         }
         return false;
     }
+
+    getNumShipsLeft() {
+        return this.getAllShips().length;
+    }
 }
 
 export class Player{
@@ -127,6 +131,10 @@ export class Player{
     }
 
     attackBoard(row, col){
-        this.board.recieveAttack(row, col)
+        return this.board.recieveAttack(row, col)
+    }
+
+    hasLost(){
+        return !this.board.hasAliveShips();
     }
 }

@@ -1,7 +1,41 @@
+body {
+    background-color: rgb(33, 33, 187);
+}
+
+h1 {
+    color: white;
+    text-align: center;
+}
+
+p {
+    color: white;
+    text-align: center;
+}
+
+.boardColumn {
+    width: 40%;
+}
+
+.boards {
+    display: flex;
+    justify-content: space-around;
+}
+
 .square {
     width: 10%;
     aspect-ratio: 1/1;
-    background-color: aquamarine;
+    background-color: rgb(127, 225, 255);
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: 1px black solid;
+}
+
+.shipSquare {
+    width: 10%;
+    aspect-ratio: 1/1;
+    background-color: rgb(75, 86, 90);
     
     display: flex;
     justify-content: center;
@@ -12,7 +46,6 @@
 .board {
     display: flex;
     flex-wrap: wrap;
-    width: 40%;
 }
 
 .hitMarker {
