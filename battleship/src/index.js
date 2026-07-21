@@ -1,12 +1,11 @@
 import "./styles.css";
-import {Ship, Gameboard, Player} from "./battleship.js";
+import { Ship, Gameboard, Player } from "./battleship.js";
 import { DOMLogic } from "./DOMLogic.js";
 
 const player = new Player("Player", "playerBoard");
 const computer = new Player("Computer", "computerBoard");
 
-player.generateRandomBoard();
 computer.generateRandomBoard();
+DOMLogic.placePlayerShips(player);
 
-DOMLogic.displayFriendlyGameboard(player);
 DOMLogic.displayEnemyGameboard(computer);

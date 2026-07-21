@@ -50,27 +50,27 @@ export class Gameboard {
     }
 
     isValidPlacement(row, col, shipLength, direction) {
-            function updateCoordinates() {
-                if (direction == "U") {
-                    row--;
-                } else if (direction == "D") {
-                    row++;
-                } else if (direction == "L") {
-                    col--;
-                } else if (direction == "R") {
-                    col++;
-                };
-            }
-
-            for (let i = 0; i < shipLength; i++) {
-                const isInRange = row >= 0 && row < 10 && col >= 0 && col < 10;
-                const isValidSquare = (isInRange) && (this.isEmptySquare(row, col))
-                if (!isValidSquare) { return false }
-                updateCoordinates();
-            }
-
-            return true;
+        function updateCoordinates() {
+            if (direction == "U") {
+                row--;
+            } else if (direction == "D") {
+                row++;
+            } else if (direction == "L") {
+                col--;
+            } else if (direction == "R") {
+                col++;
+            };
         }
+
+        for (let i = 0; i < shipLength; i++) {
+            const isInRange = row >= 0 && row < 10 && col >= 0 && col < 10;
+            const isValidSquare = (isInRange) && (this.isEmptySquare(row, col))
+            if (!isValidSquare) { return false }
+            updateCoordinates();
+        }
+
+        return true;
+    }
 
     placeShip(row, col, length, direction) {
         const ship = new Ship(length);
@@ -130,6 +130,18 @@ export class Gameboard {
 
     isEmptySquare(row, col) {
         return this.board[row][col] == "";
+    }
+
+    getSize() {
+        return this.board.length;
+    }
+
+    getSquare(row, col) {
+        return this.board[row][col]
+    }
+
+    setSquare(row, col, value) {
+        this.board[row][col] = value;
     }
 }
 

@@ -16,16 +16,68 @@ p {
     width: 40%;
 }
 
+.shipColumn {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.shipDisplayDown {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.shipDisplayLeft {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+}
+
+.shipDisplayUp {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+}
+
+.shipDisplayRight {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .boards {
     display: flex;
     justify-content: space-around;
+}
+
+.board {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.hidden {
+    display: none;
 }
 
 .square {
     width: 10%;
     aspect-ratio: 1/1;
     background-color: rgb(127, 225, 255);
-    
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -36,16 +88,22 @@ p {
     width: 10%;
     aspect-ratio: 1/1;
     background-color: rgb(75, 86, 90);
-    
+
     display: flex;
     justify-content: center;
     align-items: center;
     outline: 1px black solid;
 }
 
-.board {
+.selectedSquare{
+    width: 10%;
+    aspect-ratio: 1/1;
+    background-color: rgb(189, 130, 63);
+
     display: flex;
-    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    outline: 1px black solid;
 }
 
 .hitMarker {
