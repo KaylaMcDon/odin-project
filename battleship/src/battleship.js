@@ -113,6 +113,49 @@ export class Gameboard {
         }
     }
 
+    isValidTarget(row, col) {
+        const onBoard = row >= 0 && row < 10 && col >= 0 && col < 10;
+        if (onBoard) {
+            const square = this.board[row][col];
+            return square != "hit" && square != "miss";
+        }
+        return false;
+    }
+
+    recieveRanddomAttack() {
+        let row = Math.floor(Math.random() * 10);
+        let col = Math.floor(Math.random() * 10);
+
+        //ensure placement is valid
+        while (!this.isValidTarget(row, col)) {
+            row = Math.floor(Math.random() * 10);
+            col = Math.floor(Math.random() * 10);
+        }
+
+        //attempt to fire near hits if there are any
+        for (let i = 0; i < this.board.length; i++) {
+            for (let j = 0; j < this.board[i].length; j++) {
+                if (this.board[i][j] == "hit") {
+                    if (this.isValidTarget(i + 1, j)) {
+                        row = i + 1;
+                        col = j;
+                    } else if (this.isValidTarget(i - 1, j)) {
+                        row = i - 1;
+                        col = j;
+                    } else if (this.isValidTarget(i, j + 1)) {
+                        row = i;
+                        col = j + 1;
+                    } else if (this.isValidTarget(i, j - 1)) {
+                        row = i;
+                        col = j - 1;
+                    };
+                }
+            }
+        }
+
+        return this.recieveAttack(row, col);
+    }
+
     hasAliveShips() {
         const ships = this.getAllShips();
 
@@ -150,6 +193,7 @@ export class Player {
         this.name = name;
         this.board = new Gameboard();
         this.boardID = boardID;
+        this.enemy = null;
     }
 
     generateRandomBoard() {
@@ -194,7 +238,19 @@ export class Player {
         return this.board.recieveAttack(row, col)
     }
 
+    attackBoardRandomly() {
+        return this.board.recieveRanddomAttack()
+    }
+
     hasLost() {
         return !this.board.hasAliveShips();
+    }
+
+    setEnemy(enemy) {
+        this.enemy = enemy;
+    }
+
+    getEnemy() {
+        return this.enemy;
     }
 }

@@ -9,12 +9,12 @@ export const DOMLogic = (() => {
         }
     };
 
-    const displayEnemyGameboard = (player) => {
-        const divID = player.getBoardID();
+    const displayEnemyGameboard = (enemy) => {
+        const divID = enemy.getBoardID();
         cleargameboard(divID);
         const screenBoard = document.getElementById(divID);
 
-        const gameboard = player.getBoard();
+        const gameboard = enemy.getBoard();
         for (let row = 0; row < gameboard.getSize(); row++) {
             for (let col = 0; col < gameboard.getSize(); col++) {
                 const square = document.createElement("div");
@@ -30,18 +30,28 @@ export const DOMLogic = (() => {
                     square.appendChild(marker);
                 } else {
                     square.addEventListener("click", () => {
-                        const message = player.attackBoard(row, col);
-                        displayEnemyGameboard(player);
+                        const player = enemy.getEnemy();
+                        if (!(enemy.hasLost() || player.hasLost())) {
+                            const message = enemy.attackBoard(row, col);
+                            displayEnemyGameboard(enemy);
 
-                        const status = document.getElementById("status");
-                        if (player.hasLost()) {
-                            status.textContent = "You win!";
-                        } else {
-                            status.textContent = message;
+                            const status = document.getElementById("status");
+
+                            if (enemy.hasLost()) {
+                                status.textContent = "You win!";
+                            } else {
+                                player.attackBoardRandomly();
+                                displayFriendlyGameboard(player);
+
+                                if (player.hasLost()) {
+                                    status.textContent = "You lose!"
+                                } else {
+                                    status.textContent = message;
+                                }
+                            }
                         }
                     })
                 }
-
                 screenBoard.appendChild(square);
             }
         }
@@ -83,12 +93,12 @@ export const DOMLogic = (() => {
         //const computerColumn = document.getElementById("computerColumn");
         //computerColumn.setAttribute("class", "hidden");
 
-        placeOneShip(player, 0);
+        placeOneShipRecursive(player, 0);
     }
 
-    function placeOneShip(player, count) {
+    function placeOneShipRecursive(player, count) {
         //case to end recursive function
-        if(count==5){
+        if (count == 5) {
             displayFriendlyGameboard(player);
             const shipSelector = document.getElementById("shipSelector");
             shipSelector.setAttribute("class", "hidden");
@@ -102,7 +112,7 @@ export const DOMLogic = (() => {
 
         //reset display
         display.setAttribute("class", "shipDisplayDown");
-        while(display.hasChildNodes()){
+        while (display.hasChildNodes()) {
             display.removeChild(display.lastChild);
         }
 
@@ -153,7 +163,7 @@ export const DOMLogic = (() => {
                 if (isValid) {
                     gameboard.placeShip(row, col, ship.getLength(), possibleDirections[directionPointer.direction]);
 
-                    placeOneShip(player, count + 1)
+                    placeOneShipRecursive(player, count + 1)
                 } else {
                     //TODO: throw error message
                 }
