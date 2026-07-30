@@ -1,0 +1,1 @@
+This is my code as I go through [The Odin Projects](https://www.theodinproject.com/) Full Stack JavaScript course. All code was originally written by me, with claude being used for styling and small revisions after I finished the main logic. Any commits that made a large use of claude will be indicated as such, and will start with "Claude: ".

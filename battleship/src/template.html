@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Battleship</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -15,17 +15,19 @@
     </div>
     <div class="boards">
         <div class="boardColumn">
+            <p id="playerShipsLeft" class="shipsLeft">Ships Left: 5</p>
             <div id="playerBoard" class="board"></div>
             <p>Player</p>
         </div>
 
         <div id="computerColumn" class="hidden">
+            <p id="computerShipsLeft" class="shipsLeft">Ships Left: 5</p>
             <div id="computerBoard" class="board"></div>
             <p>Computer</p>
         </div>
 
         <div id="shipSelector" class="shipColumn">
-            <div id="shipDisplay"></div>
+            <div id="shipDisplay" class="shipDisplayDown"></div>
             <button id="rotateShip" class="rotateShip">rotate</button>
             <p>Click the square you want to place the ship on!</p>
             <p>The highlighted square will be the one placed where you click</p>

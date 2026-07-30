@@ -9,12 +9,18 @@ export const DOMLogic = (() => {
         }
     };
 
+    const updateShipsLeft = (divID, gameboard) => {
+        const shipsLeft = document.getElementById(divID.replace("Board", "ShipsLeft"));
+        shipsLeft.textContent = `Ships Left: ${gameboard.getNumShipsLeft()}`;
+    };
+
     const displayEnemyGameboard = (enemy) => {
         const divID = enemy.getBoardID();
         cleargameboard(divID);
         const screenBoard = document.getElementById(divID);
 
         const gameboard = enemy.getBoard();
+        updateShipsLeft(divID, gameboard);
         for (let row = 0; row < gameboard.getSize(); row++) {
             for (let col = 0; col < gameboard.getSize(); col++) {
                 const square = document.createElement("div");
@@ -39,12 +45,14 @@ export const DOMLogic = (() => {
 
                             if (enemy.hasLost()) {
                                 status.textContent = "You win!";
+                                document.getElementById("computerBoard").classList.add("locked");
                             } else {
                                 player.attackBoardRandomly();
                                 displayFriendlyGameboard(player);
 
                                 if (player.hasLost()) {
                                     status.textContent = "You lose!"
+                                    document.getElementById("computerBoard").classList.add("locked");
                                 } else {
                                     status.textContent = message;
                                 }
@@ -63,6 +71,9 @@ export const DOMLogic = (() => {
         const screenBoard = document.getElementById(divID);
 
         const gameboard = player.getBoard();
+        if (screenBoard.classList.contains("locked")) {
+            updateShipsLeft(divID, gameboard);
+        }
         for (let row = 0; row < gameboard.getSize(); row++) {
             for (let col = 0; col < gameboard.getSize(); col++) {
                 const square = document.createElement("div");
@@ -105,13 +116,14 @@ export const DOMLogic = (() => {
 
             const computerColumn = document.getElementById("computerColumn");
             computerColumn.setAttribute("class", "boardColumn");
+
+            document.getElementById("playerBoard").classList.add("locked");
         }
 
         const shipLengths = [5, 4, 3, 3, 2];
         const display = document.getElementById("shipDisplay");
 
         //reset display
-        display.setAttribute("class", "shipDisplayDown");
         while (display.hasChildNodes()) {
             display.removeChild(display.lastChild);
         }
@@ -127,20 +139,26 @@ export const DOMLogic = (() => {
 
         //determine ship direction/rotation
         const possibleDirections = ["D", "L", "U", "R"];
-        let directionPointer = { direction: 0 };
+        const currentDirectionLetter = display.className.replace("shipDisplay", "").charAt(0);
+        let direction = possibleDirections.indexOf(currentDirectionLetter);
 
         const rotateBTN = document.getElementById("rotateShip");
         rotateBTN.onclick = () => {
-            directionPointer.direction = (directionPointer.direction + 1) % possibleDirections.length;
+            direction = (direction + 1) % possibleDirections.length;
 
-            if (directionPointer.direction == 0) {
-                display.setAttribute("class", "shipDisplayDown");
-            } else if (directionPointer.direction == 1) {
-                display.setAttribute("class", "shipDisplayLeft");
-            } else if (directionPointer.direction == 2) {
-                display.setAttribute("class", "shipDisplayUp");
-            } else if (directionPointer.direction == 3) {
-                display.setAttribute("class", "shipDisplayRight");
+            switch (direction) {
+                case 0:
+                    display.setAttribute("class", "shipDisplayDown");
+                    break;
+                case 1:
+                    display.setAttribute("class", "shipDisplayLeft");
+                    break;
+                case 2:
+                    display.setAttribute("class", "shipDisplayUp");
+                    break;
+                case 3:
+                    display.setAttribute("class", "shipDisplayRight");
+                    break;
             }
         }
 
@@ -158,10 +176,10 @@ export const DOMLogic = (() => {
                 const col = i % 10;
 
                 const gameboard = player.getBoard()
-                const isValid = gameboard.isValidPlacement(row, col, ship.getLength(), possibleDirections[directionPointer.direction]);
+                const isValid = gameboard.isValidPlacement(row, col, ship.getLength(), possibleDirections[direction]);
 
                 if (isValid) {
-                    gameboard.placeShip(row, col, ship.getLength(), possibleDirections[directionPointer.direction]);
+                    gameboard.placeShip(row, col, ship.getLength(), possibleDirections[direction]);
 
                     placeOneShipRecursive(player, count + 1)
                 } else {
