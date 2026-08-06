@@ -9,14 +9,20 @@ function App() {
 
   return (
     <>
-    <form onSubmit={(event) => {event.preventDefault(); setFormData(new FormData(event.target))}}>
-      <Input />
-      <button>Submit</button>
-    </form>
-    
-    <Display formData={formData}/>
+      {showInputs &&
+        <form onSubmit={(event) => { event.preventDefault(); setFormData(new FormData(event.target)); setShowInputs(false) }}>
+          <Input />
+          <button type="submit">Submit</button>
+        </form>
+      }
+
+      {!showInputs && <div>
+        <button onClick={() => { setShowInputs(true) }}>Edit</button>
+        <Display formData={formData} />
+      </div>
+      }
     </>
-    
+
   )
 }
 
