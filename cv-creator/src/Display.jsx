@@ -1,11 +1,11 @@
-import { useState } from "react";
-
 function Company({ company }) {
     return (
-        <div>
-            <p>{`Company Name: ${company.companyName}`}</p>
-            <p>{`Company Position: ${company.companyPosition}`}</p>
-            <p>{`Company Responsibilities: ${company.companyResponsibilities}`}</p>
+        <div className="cv-company">
+            <div className="cv-company-title">
+                <span className="cv-company-name">{company.companyName}</span>
+                <span className="cv-company-position">{company.companyPosition}</span>
+            </div>
+            <p className="cv-company-responsibilities">{company.companyResponsibilities}</p>
         </div>
     )
 }
@@ -43,23 +43,33 @@ function DisplayCompanies({ formData }) {
 function Display({ formData }) {
     if (formData) {
         return (
-            <div>
-                <div>
-                    <h2>General Information</h2>
-                    <p>{`Name: ${formData.get("name")}`}</p>
-                    <p>{`Email: ${formData.get("email")}`}</p>
-                    <p>{`Phone Number: ${formData.get("phoneNum")}`}</p>
+            <div className="cv-display">
+                <h1 className="cv-name">{formData.get("name")}</h1>
+                <div className="cv-contact-row">
+                    <span>{formData.get("email")}</span>
+                    <span>{formData.get("phoneNum")}</span>
                 </div>
 
-                <div>
+                <div className="cv-section">
                     <h2>Education</h2>
-                    <p>{`School Name: ${formData.get("school")}`}</p>
-                    <p>{`Major: ${formData.get("major")}`}</p>
-                    <p>{`GPA: ${formData.get("gpa")}`}</p>
+                    <div className="cv-detail-row">
+                        <span className="cv-detail-label">School:</span>
+                        <span>{formData.get("school")}</span>
+                    </div>
+                    <div className="cv-detail-row">
+                        <span className="cv-detail-label">Major:</span>
+                        <span>{formData.get("major")}</span>
+                    </div>
+                    <div className="cv-detail-row">
+                        <span className="cv-detail-label">GPA:</span>
+                        <span>{formData.get("gpa")}</span>
+                    </div>
                 </div>
 
-                <h2>Experience</h2>
-                <DisplayCompanies formData={formData} />
+                <div className="cv-section">
+                    <h2>Experience</h2>
+                    <DisplayCompanies formData={formData} />
+                </div>
             </div>
         )
     }

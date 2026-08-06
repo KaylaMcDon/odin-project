@@ -8,20 +8,32 @@ function App() {
   const [formData, setFormData] = useState(false)
 
   return (
-    <>
+    <div className="app">
+      <header className="app-header">
+        <h1>CV Creator</h1>
+        <p className="app-subtitle">Fill in your details to build a clean, shareable resume.</p>
+      </header>
+
       {showInputs &&
-        <form onSubmit={(event) => { event.preventDefault(); setFormData(new FormData(event.target)); setShowInputs(false) }}>
+        <form
+          className="cv-form"
+          onSubmit={(event) => { event.preventDefault(); setFormData(new FormData(event.target)); setShowInputs(false) }}
+        >
           <Input />
-          <button type="submit">Submit</button>
+          <div className="form-actions">
+            <button type="submit" className="btn btn-primary">Submit</button>
+          </div>
         </form>
       }
 
-      {!showInputs && <div>
-        <button onClick={() => { setShowInputs(true) }}>Edit</button>
+      {!showInputs && <div className="cv-result">
+        <div className="cv-result-actions">
+          <button className="btn btn-secondary" onClick={() => { setShowInputs(true) }}>Edit</button>
+        </div>
         <Display formData={formData} />
       </div>
       }
-    </>
+    </div>
 
   )
 }
