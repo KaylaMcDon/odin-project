@@ -3,14 +3,14 @@ import { useState } from 'react';
 function Company({ id }) {
     return (
         <div>
-            <label htmlFor={`compName ${id}`}>Company Name</label>
-            <input type="text" name={`compName ${ id }`} id={`compName " + { id }`} />
+            <label htmlFor={`companyName ${id}`}>Company Name</label>
+            <input type="text" name={`companyName ${ id }`} id={`companyName ${ id }`} />
 
-            <label htmlFor={`position ${ id }id }`}>Position</label>
-            <input type="text" name={`position ${ id }{ id }`} id={`position ${ id }{ id }`} />
+            <label htmlFor={`companyPosition ${ id }`}>Position</label>
+            <input type="text" name={`companyPosition ${ id }`} id={`companyPosition ${ id }`} />
 
-            <label htmlFor={`responsibilities ${ id }{ id }`}>Responsibilities</label>
-            <input type="text" name={`responsibilities ${ id }{ id }`} id={`responsibilities ${ id }{ id }`} />
+            <label htmlFor={`companyResponsibilities ${ id }`}>Responsibilities</label>
+            <input type="text" name={`companyResponsibilities ${ id }`} id={`companyResponsibilities ${ id }`} />
         </div>
     )
 }
@@ -25,10 +25,10 @@ function DisplayCompanies({ids}) {
 
 
 function Input() {
-    const [companyIds, setIds] = useState([crypto.randomUUID()]);
+    const [companyIds, setIds] = useState([0]);
 
     function addId() {
-        const newIds = companyIds.concat([crypto.randomUUID()]);
+        const newIds = companyIds.concat([companyIds.length]);
         setIds(newIds);
     }
 
@@ -43,7 +43,7 @@ function Input() {
             <input type="email" name="email" id="email" />
 
             <label htmlFor="phoneNum">Phone Number</label>
-            <input type="tel" name="phoneNum" id="phoneNum" />
+            <input type="number" name="phoneNum" id="phoneNum" />
 
             <h2>Education</h2>
 
@@ -54,7 +54,7 @@ function Input() {
             <input type="text" name="major" id="major" />
 
             <label htmlFor="gpa">GPA</label>
-            <input type=" number" name="gpa" id="gpa" />
+            <input type="number" name="gpa" id="gpa" />
 
             <h2>Experience</h2>
             <button type="button" onClick={addId}>Add Company</button>
